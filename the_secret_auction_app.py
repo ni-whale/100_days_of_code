@@ -18,7 +18,7 @@ logo = '''
 bids_log = []
 different_bidder = True
 result = []
-test = True
+
 # def highest_bid(new_name, new_bid):
 #     new_dict = {"name": new_name, "bid": new_bid}
 #     bids_log.append(new_dict)
@@ -46,7 +46,7 @@ while different_bidder:
     name = input("What is your name?: ")
     bid = input("What is your bid?: ")
     result = highest_bid(new_name=name, new_bid=bid)
-    print(f'result is {result}')
+    test = True
     while test:
         condition = input("Are there any other bidders? Type 'yes' or 'no': ")
         if condition == 'no':
@@ -59,7 +59,10 @@ while different_bidder:
             different_bidder = True
             test = False
         else:
+            print("Please, try again.")
             continue
+
+
 
 
 
