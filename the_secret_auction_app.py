@@ -17,15 +17,19 @@ logo = '''
 
 bids_log = []
 different_bidder = True
-i = 0
+
 
 def highest_bid(new_name, new_bid):
     new_dict = {"name": new_name, "bid": new_bid}
     print(f"new dict: {new_dict}")
     bids_log.append(new_dict)
     print(f"bids log: {bids_log}")
-
-    # for bid in bids_log:
+    print(f"bid: {bids_log[0]['bid']}")
+    top_bid = 0
+    for bid in bids_log:
+        if int(bid['bid']) > top_bid:
+            top_bid = int(bid['bid'])
+    print(f"THe highest_bid is {top_bid}")
 
 
 # print(logo)
@@ -42,5 +46,5 @@ while different_bidder:
     elif condition == 'yes':
         print("okido")
         different_bidder = True
-    else:
-        print("Please, try again.")
+    # else:
+    #     print("Please, try again.")
