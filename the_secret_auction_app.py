@@ -19,15 +19,6 @@ bids_log = []
 different_bidder = True
 result = []
 
-# def highest_bid(new_name, new_bid):
-#     new_dict = {"name": new_name, "bid": new_bid}
-#     bids_log.append(new_dict)
-#     top_bid = 0
-#     for value in bids_log:
-#         if int(value['bid']) > top_bid:
-#             top_bid = int(value['bid'])
-#     return top_bid
-
 def highest_bid(new_name, new_bid):
     new_dict = {"name": new_name, "bid": new_bid}
     bids_log.append(new_dict)
@@ -37,6 +28,18 @@ def highest_bid(new_name, new_bid):
             top_bid[0] = int(value['bid'])
             top_bid[1] = value['name']
     return top_bid
+
+# def highest_bid(new_name, new_bid):
+#     new_dict = {"name": new_name, "bid": new_bid}
+#     bids_log.append(new_dict)
+#     top_bid = 0
+#     winner = " "
+#     for bidder in bids_log:
+#         bid_amount = bids_log[bidder]
+#         if bid_amount > top_bid:
+#             top_bid = bid_amount
+#             winner = bidder
+#     return top_bid, winner
 
 
 print(logo)
