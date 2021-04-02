@@ -1,3 +1,6 @@
+import art
+
+
 # Add
 def add(n1, n2):
     """Summarise 2 different digits"""
@@ -49,40 +52,28 @@ operations = {
 #         print("Good bye!")
 #         condition = False
 
-num1 = int(input("What's the first number?: "))
+print(art.logo)
 
 
-for symbol in operations:
-    print(symbol)
-should_continue = True
-symbol_check = True
+def calculator():
+    num1 = float(input("What's the first number?: "))
 
-while should_continue:
-    operation_symbol = input("Pick an operation: ")
-    num2 = int(input("What's the next number?: "))
-    function = operations[operation_symbol]
-    answer = function(n1=num1, n2=num2)
+    for symbol in operations:
+        print(symbol)
+    should_continue = True
+    symbol_check = True
 
-    print(f"{num1} {operation_symbol} {num2} = {answer}")
-    if input(f"Type 'y' to continue calculating with {answer}, or type 'n' to exit: ") == 'y':
-        num1 = answer
-    else:
-        print("Good buy")
-        should_continue = False
+    while should_continue:
+        operation_symbol = input("Pick an operation: ")
+        num2 = float(input("What's the next number?: "))
+        function = operations[operation_symbol]
+        answer = function(n1=num1, n2=num2)
 
+        print(f"{num1} {operation_symbol} {num2} = {answer}")
+        if input(f"Type 'y' to continue calculating with {answer}, or type 'n' to start a new calculation: ") == 'y':
+            num1 = answer
+        else:
+            # should_continue = False
+            calculator()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+calculator()
