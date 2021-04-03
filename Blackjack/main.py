@@ -1,9 +1,8 @@
 import art
 import random
-import pyautogui
 
-# cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 11, 11, 10, 10]
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
 
 
 def new_hand():
@@ -30,7 +29,9 @@ def score(hand):
 
 def check(score):
     """Simple check which shows if the user can continue the game"""
-    if score > 21:
+    if score == 21:
+        return 'Win'
+    elif score > 21:
         return 'Bust!'
     else:
         return 'ok'
@@ -42,6 +43,7 @@ def ace_rule(player_hand):
         for value in player_hand:
             if value == 11:
                 player_hand[player_hand.index(value)] = 1
+                break
             else:
                 continue
         return player_hand
@@ -63,13 +65,12 @@ def print_current_state(player_hand, dealer_hand, needs_another_card):
 
 def game():
     if input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == 'y':
-        # print(art.logo)
+        print(art.logo)
         # Start of the game where player and dialer are getting initial cards and we see the current score
         player_hand = new_hand()
         player_hand = ace_rule(player_hand)
         dealer_hand = new_hand()
         print_current_state(player_hand, dealer_hand, True)
-        print(check(score(player_hand)))
         # End of this section
 
         # Asking the user if he want to take another card and checking his score after this action
@@ -83,6 +84,9 @@ def game():
                     print_current_state(player_hand, dealer_hand, False)
                     print('You lose!')
                     game()
+                elif check(score(player_hand)) == 'Win':
+                    print('You win!')
+                    game()
             else:
                 should_take_another_card = False
                 continue
@@ -95,8 +99,8 @@ def game():
             if check(score(dealer_hand)) == 'Bust!':
                 print_current_state(player_hand, dealer_hand, False)
                 print('You win!')
-            # else:
         # End of this section
+
         # Checking who is the winner
         if check(score(dealer_hand)) == 'ok':
             print_current_state(player_hand, dealer_hand, False)
