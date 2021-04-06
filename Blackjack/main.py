@@ -1,9 +1,6 @@
 import art
 import random
 
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-
-
 
 def new_hand():
     """Using only for the start of the game to generate the hand for the player/dealer"""
@@ -15,6 +12,7 @@ def new_hand():
 
 def new_card():
     """Using for getting a new card from the deck"""
+    cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
     card = random.choice(cards)
     return card
 
