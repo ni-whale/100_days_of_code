@@ -28,7 +28,7 @@ def game():
     print("-----------------------------")
     print("I'm thinking of a number between 1 and 100...")
     secret_number = random.randrange(1, 100)
-    print(f"Generated number is {secret_number}")
+    # print(f"Generated number is {secret_number}")
     typo_is_here = True
     while typo_is_here:
         difficulty = input("Choose difficulty. Type 'easy' or 'hard': ")
