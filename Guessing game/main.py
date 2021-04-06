@@ -41,15 +41,21 @@ def game():
         while typo_is_here:
             try:
                 user_guess = int(input("Make a guess: "))
-                # break
+                break
             except ValueError:
                 print("Oops! That was not valid number. Try again...")
 
-            if checking_the_guess(secret_number, user_guess) == 0:
-                print(f"You got it! The answer is {secret_number}")
+        if checking_the_guess(secret_number, user_guess) == 0:
+            print(f"You got it! The answer is {secret_number}")
+            exit()
+        else:
+            if lives == 1:
+                print(f"You failed. The correct answer was {secret_number}.")
                 exit()
             else:
+                lives -= 1
                 print(checking_the_guess(secret_number, user_guess))
+                print(f"{lives} attempts to guess the number left.")
 
 
 game()
