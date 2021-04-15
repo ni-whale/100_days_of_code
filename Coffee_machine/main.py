@@ -16,7 +16,12 @@ def report():
 # TODO: 2. Check if resources are sufficient.
 
 def resource_checking(client_choice):
-    print(MENU["latte"]["ingredients"])
+    # print(MENU[client_choice]["ingredients"])
+    for item in MENU[client_choice]["ingredients"]:
+        current_resources[item] = current_resources[item] - MENU[client_choice]["ingredients"][item]
+        print(current_resources)
+        # for key in item:
+        #     print(item[key])
 
 
 # TODO: 3. Processing of coins.
@@ -42,4 +47,9 @@ def taking_the_order():
 
 
 # taking_the_order()
+report()
+print("---------------------------------")
+resource_checking("espresso")
+print("---------------------------------")
+report()
 
