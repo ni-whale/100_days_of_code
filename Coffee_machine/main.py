@@ -1,4 +1,5 @@
 from data import MENU, resources
+
 current_resources = resources
 
 
@@ -16,12 +17,14 @@ def report():
 # TODO: 2. Check if resources are sufficient.
 
 def resource_checking(client_choice):
-    # print(MENU[client_choice]["ingredients"])
     for item in MENU[client_choice]["ingredients"]:
-        current_resources[item] = current_resources[item] - MENU[client_choice]["ingredients"][item]
-        print(current_resources)
-        # for key in item:
-        #     print(item[key])
+        if current_resources[item] - MENU[client_choice]["ingredients"][item] <= 0:
+            return item
+        else:
+            current_resources[item] = current_resources[item] - MENU[client_choice]["ingredients"][item]
+    return "OK"
+
+    print(current_resources)
 
 
 # TODO: 3. Processing of coins.
@@ -38,18 +41,21 @@ def taking_the_order():
             choice = input("What would you like? (espresso/latte/cappuccino): ")
             if choice == "espresso" or choice == "latte" or choice == "cappuccino":
                 break
-        except NameError("espresso", "latte", "cappuccino"):  # Not sure which exception should be there to print the result. Need to google it.
+        except NameError("espresso", "latte",
+                         "cappuccino"):  # Not sure which exception should be there to print the result. Need to google it.
             print("Oops! That was not valid input. Try again...")
-    if resource_checking(client_choice=choice) == 'ok':
-        ...
+    if resource_checking(client_choice=choice) == 'OK':
+        print("Seems everything is fine")
     else:
         print(f"Sorry there is not enough {resource_checking(client_choice=choice)}")
 
+    # # taking_the_order()
+    # report()
+    # print("---------------------------------")
+    # resource_checking("espresso")
+    # print("---------------------------------")
+    # report()
 
-# taking_the_order()
-report()
-print("---------------------------------")
-resource_checking("espresso")
-print("---------------------------------")
-report()
 
+taking_the_order()
+report()
