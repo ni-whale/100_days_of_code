@@ -5,7 +5,6 @@ current_resources = resources
 
 # TODO: 1. Printing of the report with the current value of available ingredients & earned money.
 
-
 def report():
     current_resources["money"] = 0
     print(f"Water: {current_resources['water']}")
@@ -24,10 +23,26 @@ def resource_checking(client_choice):
             current_resources[item] = current_resources[item] - MENU[client_choice]["ingredients"][item]
     return "OK"
 
-    print(current_resources)
-
 
 # TODO: 3. Processing of coins.
+
+def coins_checking(inserted_coins, user_choice):
+    sum_of_inserted_coins = inserted_coins["quarters"] * 0.25 + inserted_coins["dimes"] * 0.10 + \
+                            inserted_coins["nickles"] * 0.05 + inserted_coins["pennies"] * 0.01
+
+
+
+    return sum_of_inserted_coins
+
+
+def coins_input_validation(coin):
+    while True:
+        try:
+            user_input = int(input(f"How many {coin}: "))
+            return user_input
+        except ValueError:
+            print("Oops! That was no valid number. Try again...")
+
 
 # TODO: 4. Checking if the transaction was successful.
 
@@ -35,6 +50,7 @@ def resource_checking(client_choice):
 
 
 def taking_the_order():
+    # validation of the user's choice
     input_error = True
     while input_error:
         try:
@@ -48,14 +64,20 @@ def taking_the_order():
         print("Seems everything is fine")
     else:
         print(f"Sorry there is not enough {resource_checking(client_choice=choice)}")
+    # end of validation choice part
 
-    # # taking_the_order()
-    # report()
-    # print("---------------------------------")
-    # resource_checking("espresso")
-    # print("---------------------------------")
-    # report()
+    # checking if money is sufficient
+    coins = {
+        "quarters": 0,
+        "dimes": 0,
+        "nickles": 0,
+        "pennies": 0,
+    }
+    print("Please insert the coins:")
+    for coin in coins:
+        coins[coin] = coins_input_validation(coin)
+    print(coins_checking(inserted_coins=coins, user_choice=choice))
 
 
 taking_the_order()
-report()
+# report()
