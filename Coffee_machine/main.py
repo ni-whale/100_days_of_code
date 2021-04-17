@@ -26,12 +26,9 @@ def resource_checking(client_choice):
 
 # TODO: 3. Processing of coins.
 
-def coins_checking(inserted_coins, user_choice):
+def coins_checking(inserted_coins):
     sum_of_inserted_coins = inserted_coins["quarters"] * 0.25 + inserted_coins["dimes"] * 0.10 + \
                             inserted_coins["nickles"] * 0.05 + inserted_coins["pennies"] * 0.01
-
-
-
     return sum_of_inserted_coins
 
 
@@ -45,6 +42,15 @@ def coins_input_validation(coin):
 
 
 # TODO: 4. Checking if the transaction was successful.
+
+def transaction_checking(inserted_coins, users_choice):
+    if inserted_coins < MENU[users_choice]["cost"]:
+        return "not OK"
+    elif inserted_coins > MENU[users_choice]["cost"]:
+        return inserted_coins - MENU[users_choice]["cost"]
+    else:
+        current_resources["money"] += inserted_coins
+
 
 # TODO: 5. Making a coffee.
 
@@ -76,8 +82,11 @@ def taking_the_order():
     print("Please insert the coins:")
     for coin in coins:
         coins[coin] = coins_input_validation(coin)
-    print(coins_checking(inserted_coins=coins, user_choice=choice))
-
+    # print(coins_checking(inserted_coins=coins))
+    if transaction_checking(inserted_coins=coins_checking(inserted_coins=coins), users_choice=choice) == "not OK":
+        print("Sorry that's not enough money. Money refunded.")
+    elif transaction_checking(inserted_coins=coins_checking(inserted_coins=coins), users_choice=choice) == type(float):
+        print(f"Here is your change.")
 
 taking_the_order()
 # report()
