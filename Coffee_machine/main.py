@@ -5,8 +5,8 @@ current_resources = resources
 
 # TODO: 1. Printing of the report with the current value of available ingredients & earned money.
 
+
 def report():
-    current_resources["money"] = 0
     print(f"Water: {current_resources['water']}")
     print(f"Milk: {current_resources['milk']}")
     print(f"Coffee: {current_resources['coffee']}")
@@ -47,15 +47,18 @@ def transaction_checking(inserted_coins, users_choice):
     if inserted_coins < MENU[users_choice]["cost"]:
         return "not OK"
     elif inserted_coins > MENU[users_choice]["cost"]:
-        return inserted_coins - MENU[users_choice]["cost"]
+        change = inserted_coins - MENU[users_choice]["cost"]
+        current_resources['money'] += change
+        return change
     else:
-        current_resources["money"] += inserted_coins
+        current_resources['money'] += inserted_coins
 
 
 # TODO: 5. Making a coffee.
 
 
 def taking_the_order():
+    current_resources['money'] = 0
     # validation of the user's choice
     input_error = True
     while input_error:
@@ -83,10 +86,15 @@ def taking_the_order():
     for coin in coins:
         coins[coin] = coins_input_validation(coin)
     # print(coins_checking(inserted_coins=coins))
-    if transaction_checking(inserted_coins=coins_checking(inserted_coins=coins), users_choice=choice) == "not OK":
+    transaction = transaction_checking(inserted_coins=coins_checking(inserted_coins=coins), users_choice=choice)
+    if transaction == "not OK":
         print("Sorry that's not enough money. Money refunded.")
-    elif transaction_checking(inserted_coins=coins_checking(inserted_coins=coins), users_choice=choice) == type(float):
-        print(f"Here is your change.")
+    elif isinstance(transaction, float):
+        print(f"Here is your change. {transaction}$")
+    else:
+        print(f"Enjoy your {choice}!")
 
+#
 taking_the_order()
-# report()
+report()
+
