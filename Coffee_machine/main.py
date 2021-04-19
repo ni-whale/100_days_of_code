@@ -10,12 +10,14 @@ def report():
     print(f"Water: {current_resources['water']}")
     print(f"Milk: {current_resources['milk']}")
     print(f"Coffee: {current_resources['coffee']}")
-    print(f"Money: {current_resources['money']}")
+    print(f"Money: ${current_resources['money']}")
 
 
 # TODO: 2. Check if resources are sufficient.
 
 def resource_checking(client_choice):
+    if client_choice == "report":
+        return "report"
     for item in MENU[client_choice]["ingredients"]:
         if current_resources[item] - MENU[client_choice]["ingredients"][item] <= 0:
             return item
@@ -48,8 +50,8 @@ def transaction_checking(inserted_coins, users_choice):
         return "not OK"
     elif inserted_coins > MENU[users_choice]["cost"]:
         change = inserted_coins - MENU[users_choice]["cost"]
-        current_resources['money'] += change
-        return change
+        current_resources['money'] += MENU[users_choice]["cost"]
+        return round(change, 2)
     else:
         current_resources['money'] += inserted_coins
 
@@ -57,22 +59,33 @@ def transaction_checking(inserted_coins, users_choice):
 # TODO: 5. Making a coffee.
 
 
+def off():
+    exit()
+
+
 def taking_the_order():
     current_resources['money'] = 0
     # validation of the user's choice
     input_error = True
-    while input_error:
-        try:
-            choice = input("What would you like? (espresso/latte/cappuccino): ")
-            if choice == "espresso" or choice == "latte" or choice == "cappuccino":
-                break
-        except NameError("espresso", "latte",
-                         "cappuccino"):  # Not sure which exception should be there to print the result. Need to google it.
-            print("Oops! That was not valid input. Try again...")
-    if resource_checking(client_choice=choice) == 'OK':
-        print("Seems everything is fine")
-    else:
-        print(f"Sorry there is not enough {resource_checking(client_choice=choice)}")
+    the_report_chosed = False
+    while not the_report_chosed:
+        while input_error:
+            try:
+                choice = input("What would you like? (espresso/latte/cappuccino): ")
+                if choice == "espresso" or choice == "latte" or choice == "cappuccino" or choice == "report" \
+                        or choice == "off":
+                    break
+            except NameError():  # Not sure which exception should be there to print the result. Need to google it.
+                print("Oops! That was not valid input. Try again...")
+        if choice == "off":
+            off()
+        if resource_checking(client_choice=choice) == 'OK':
+            print("Seems everything is fine")
+        elif resource_checking(client_choice=choice) == 'report':
+            report()
+            the_report_chosed = True
+        else:
+            print(f"Sorry there is not enough {resource_checking(client_choice=choice)}")
     # end of validation choice part
 
     # checking if money is sufficient
@@ -90,7 +103,7 @@ def taking_the_order():
     if transaction == "not OK":
         print("Sorry that's not enough money. Money refunded.")
     elif isinstance(transaction, float):
-        print(f"Here is your change. {transaction}$")
+        print(f"Here is your change. ${transaction}")
     else:
         print(f"Enjoy your {choice}!")
 
