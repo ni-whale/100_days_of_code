@@ -1,10 +1,10 @@
 from data import MENU, resources
 
 current_resources = resources
+current_resources['money'] = 0
 
 
 # TODO: 1. Printing of the report with the current value of available ingredients & earned money.
-
 
 def report():
     print(f"Water: {current_resources['water']}")
@@ -58,17 +58,15 @@ def transaction_checking(inserted_coins, users_choice):
 
 # TODO: 5. Making a coffee.
 
-
 def off():
     exit()
 
 
 def taking_the_order():
-    current_resources['money'] = 0
-    # validation of the user's choice
     input_error = True
-    the_report_chosed = False
-    while not the_report_chosed:
+    the_report_chose = False
+    # validation of the user's choice
+    while not the_report_chose:
         while input_error:
             try:
                 choice = input("What would you like? (espresso/latte/cappuccino): ")
@@ -79,13 +77,16 @@ def taking_the_order():
                 print("Oops! That was not valid input. Try again...")
         if choice == "off":
             off()
-        if resource_checking(client_choice=choice) == 'OK':
-            print("Seems everything is fine")
-        elif resource_checking(client_choice=choice) == 'report':
+        elif choice == "report":
             report()
-            the_report_chosed = True
         else:
-            print(f"Sorry there is not enough {resource_checking(client_choice=choice)}")
+            the_report_chose = True
+            if resource_checking(client_choice=choice) == 'OK':
+                continue
+                # print("Seems everything is fine")
+            else:
+                print(f"Sorry there is not enough {resource_checking(client_choice=choice)}.")
+                taking_the_order()
     # end of validation choice part
 
     # checking if money is sufficient
@@ -107,7 +108,9 @@ def taking_the_order():
     else:
         print(f"Enjoy your {choice}!")
 
-#
+    taking_the_order()
+
+
 taking_the_order()
-report()
+
 
