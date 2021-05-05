@@ -3,18 +3,16 @@ from coffee_maker import CoffeeMaker
 from money_machine import MoneyMachine
 
 # TODO 1: Print report
-
 coffee_machine = CoffeeMaker()
 
 
 # TODO 2: Check resources sufficient
-
-def resource_checking(users_choice):
-    coffee = MenuItem(name=users_choice)
-    # coff
+coffee = Menu()
 
 
 # TODO 3: Process coins
+money = MoneyMachine()
+
 # TODO 4: Transaction validation
 # TODO 5: Making a coffee
 
@@ -25,7 +23,6 @@ def off():
 def taking_the_order():
     input_error = True
     the_report_chose = False
-    # validation of the user's choice
     while not the_report_chose:
         while input_error:
             try:
@@ -39,16 +36,15 @@ def taking_the_order():
             off()
         elif choice == "report":
             coffee_machine.report()
+            money.report()
+            taking_the_order()
         else:
-            the_report_chose = True
-            if coffee_machine.is_resource_sufficient(choice):
-                continue
-                # print("Seems everything is fine")
-            else:
-                print(f"Sorry there is not enough {resource_checking(client_choice=choice)}.")
-                taking_the_order()
-    # end of validation choice part
+            coffee_machine.is_resource_sufficient(coffee.find_drink(choice))
+            # taking_the_order()
+            # inserted_money = money.process_coins()
+            # if money.make_payment(money.process_coins()):
+            #     print("seems fine")
+            #     coffee_machine.make_coffee(coffee.find_drink(choice))
+            print(money.make_payment(money.process_coins()))
 
-
-# print(report.report())
 taking_the_order()
