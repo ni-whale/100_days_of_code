@@ -15,4 +15,5 @@ user_1 = User("001", "nick")
 user_2 = User("002", "homer")
 
 user_1.follow(user_2)
-print(f"user1: following - {user_1.following}, followers - {user_1.followers}, user2: following - {user_2.following}, followers - {user_2.followers}")
+print(f"user1: following - {user_1.following}, followers - {user_1.followers}, user2: following - {user_2.following}, "
+      f"followers - {user_2.followers}")
