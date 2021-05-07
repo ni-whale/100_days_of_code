@@ -9,9 +9,6 @@ for record in question_data:
 
 quiz_brain = QuizBrain(question_bank)
 
-in_game = True
 
 while quiz_brain.still_has_questions():
     quiz_brain.next_question()
-
-
