@@ -9,6 +9,7 @@ for record in question_data:
 
 quiz_brain = QuizBrain(question_bank)
 
-
 while quiz_brain.still_has_questions():
     quiz_brain.next_question()
+print("You have complete the quiz.")
+print(f"The final score was: {quiz_brain.score}/{quiz_brain.question_number}")
