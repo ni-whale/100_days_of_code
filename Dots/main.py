@@ -30,12 +30,17 @@ screen = t.Screen()
 
 t.colormode(255)
 leo.penup()
-# leo.dot(20)
-leo.goto(-230, -200)
+x = -220
+y = -200
+leo.goto(x, y)
 for _ in range(10):
-    leo.pencolor(choice(color_list))
-    leo.dot(20)
-    leo.goto(leo.xcor() + 50, -200)
+    for _ in range(10):
+        leo.pencolor(choice(color_list))
+        leo.dot(20)
+        leo.goto(leo.xcor() + 50, y)
+    y = y + 50
+    leo.goto(x, y)
+
 
 
 
