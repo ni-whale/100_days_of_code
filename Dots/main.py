@@ -30,6 +30,7 @@ screen = t.Screen()
 
 t.colormode(255)
 leo.penup()
+leo.hideturtle()
 x = -220
 y = -200
 leo.goto(x, y)
@@ -40,8 +41,5 @@ for _ in range(10):
         leo.goto(leo.xcor() + 50, y)
     y = y + 50
     leo.goto(x, y)
-
-
-
 
 screen.exitonclick()
