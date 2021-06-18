@@ -23,7 +23,7 @@ screen.onkey(l_paddle.go_down, "s")
 
 game_is_on = True
 while game_is_on:
-    time.sleep(0.1)
+    time.sleep(ball.move_speed)
     screen.update()
     ball.move()
 
@@ -34,7 +34,6 @@ while game_is_on:
     # Detect collision with the right puddle
     if ball.distance(r_paddle) < 50 and ball.xcor() > 320 or ball.distance(l_paddle) < 50 and ball.xcor() < -320:
         ball.bounce_x()
-        ball.increase_speed()
 
     # Detect when the ball goes out of bounds for the r_paddle
     if ball.xcor() > 380:
