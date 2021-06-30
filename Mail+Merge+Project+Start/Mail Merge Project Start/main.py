@@ -16,8 +16,8 @@ with open("Input/Names/invited_names.txt", mode="r") as file:
 
 for name in names_list:
     text = ""
-    with open(f"Input/Names/{name}.txt", mode="w") as file:
-        file.write(text.join(template_of_the_letter).replace("[name]", name.strip("\n")))
+    with open(f"Output/ReadyToSend/{name}.txt", mode="w") as file:
+        file.write(text.join(template_of_the_letter).replace("[name]", name.strip("\n")))  # join list as a complete string and replace blank by name from the list
 
 
 
