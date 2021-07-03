@@ -10,6 +10,7 @@ import pandas
     - Keep track of the score     
 """
 
+FONT = ("Courier", 10, "normal")
 
 screen = turtle.Screen()
 screen.title("U.S. States Game")
@@ -17,28 +18,30 @@ image = "blank_states_img.gif"
 screen.addshape(image)
 turtle.shape(image)
 
+t = turtle.Turtle()
+t.penup()
+t.hideturtle()
+
 game_is_on = True
 
 data = pandas.read_csv("50_states.csv")
 guessed_states = []
 
-# while game_is_on:
-#     answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?")
-#     for state in data.state:
-#         if str(state).lower() == answer_state.lower():
-#             guessed_states.append(answer_state)
+while game_is_on:
+    answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?")
+    for state in data.state:
+        if str(state).lower() == answer_state.lower():
+            guessed_states.append(answer_state)
+            current_state = data[data.state == state]  # saving the filtered output to get access to x, y
+            t.goto(float(current_state.x), float(current_state.y))
+            t.write(f"{state}", font=FONT)
+
 
 # while game_is_on:
 #     answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?")
 #     temp = data[data.state == answer_state]
 #     guessed_states.append(temp)
 
-while game_is_on:
-    answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?")
-    for df in data:
-        # if str(df.state).lower() == answer_state.lower():
-        #     guessed_states.append(answer_state)
-        print(df.state)
 
 
 
