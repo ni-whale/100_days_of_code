@@ -25,18 +25,37 @@ t.hideturtle()
 data = pandas.read_csv("50_states.csv")
 guessed_states = []
 
-answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?")
+answer_state = screen.textinput(title="Guess the state", prompt="What's another state's name?").title()
 
-game_is_on = True
-while game_is_on:
+while len(guessed_states) < 50:
+    if answer_state == "Exit":
+        break
     for state in data.state:
-        if str(state).lower() == answer_state.lower():
+        if str(state) == answer_state:
             guessed_states.append(state)
             current_state = data[data.state == state]  # saving the filtered output to get access to x, y
             t.goto(float(current_state.x), float(current_state.y))
             t.write(f"{state}", font=FONT)
     answer_state = screen.textinput(title=f"{len(guessed_states)}/50 States Correct",
-                                    prompt="What's another state's name?")  # updating title to keep correct answers
+                                    prompt="What's another state's name?") .title() # updating title to keep correct answers
+
+missed_states = []
+
+all_states = data.state.to_list()
+
+for state in all_states:
+    temp = guessed_states[state]
+    if state != temp:
+        missed_states.append(state)
+
+
+
+
+
+
+
+
+
 
 # Another variant:
 # while game_is_on:
