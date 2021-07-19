@@ -1,5 +1,11 @@
 from tkinter import *
 
+# ---------------------------- CONSTANTS ------------------------------- #
+NAVY = "#334257"
+LIGHT_NAVY = "#476072"
+DARK_BLUE = "#548CA8"
+GRAY = "#EEEEEE"
+FONT = ("Courier", 12, "normal")
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -10,13 +16,40 @@ from tkinter import *
 
 window = Tk()
 window.title("MyPass")
-window.config(padx=20, pady=20)
+window.config(padx=20, pady=20, bg=NAVY)
 
 # Canvas
-canvas = Canvas(width=500, height=500)
-mypass_logo = PhotoImage(file="Logo 500x500/1.png")
-canvas.create_image(250, 250, image=mypass_logo)
-canvas.pack()
+canvas = Canvas(width=250, height=250, bg=NAVY, highlightthickness=0)
+mypass_logo = PhotoImage(file="Logo 250x250/Blue and White Hexagon Mountain Peaks Adventure Logo.png")
+canvas.create_image(155, 125, image=mypass_logo)
+canvas.grid(column=1, row=0)
 
+# Labels
+l_website = Label(text="Website:", font=FONT, bg=NAVY, fg=GRAY)
+l_website.grid(column=0, row=1)
+
+l_email = Label(text="Email/Username:", font=FONT, bg=NAVY, fg=GRAY)
+l_email.grid(column=0, row=2)
+
+l_password = Label(text="Password:", font=FONT, bg=NAVY, fg=GRAY)
+l_password.grid(column=0, row=3)
+
+# Entries
+e_website = Entry(width=46, bg=GRAY)
+e_website.focus()
+e_website.grid(column=1, row=1, columnspan=2)
+
+e_email = Entry(width=46, bg=GRAY)
+e_email.grid(column=1, row=2, columnspan=2)
+
+e_password = Entry(width=21, bg=GRAY)
+e_password.grid(column=1, row=3)
+
+# Buttons
+b_generate_password = Button(text="Generate Password", font=FONT, bg=GRAY)
+b_generate_password.grid(column=2, row=3)
+
+b_add = Button(text="Add", font=FONT, width=34, bg=GRAY)
+b_add.grid(column=1, row=4, columnspan=2)
 
 window.mainloop()
