@@ -1,7 +1,9 @@
+import json
 from tkinter import *
 from tkinter import messagebox
 import secrets
 import pyperclip
+
 
 # ---------------------------- CONSTANTS ------------------------------- #
 NAVY = "#334257"
@@ -24,13 +26,25 @@ def password_saving():
     website = e_website.get()
     email = e_email.get()
     password = e_password.get()
-    info = [website, email, password]
-    if "" in info:
+    new_data = {
+        website: {
+            "email": email,
+            "password": password
+        }
+    }
+    if len(website) == 0 or len(email) == 0 or len(password) == 0:
         messagebox.showerror("Oops", message="Please make sure you haven't left any fields empty.")
     else:
-        result = f"{website} | {email} | {password}"
-        with open("password.txt", mode="a") as file:
-            file.write(f"{result}\n")
+        with open("data.json", mode="r") as file:
+            # Reading old data
+            data = json.load(file)
+            # Updating old data with new data
+            data.update(new_data)
+
+        with open("data.json", "w") as file:
+            # Saving updated data
+            json.dump(data, file, indent=4)
+
         messagebox.showinfo(title="Record adding", message="The password was successfully added.")
         data_deleting()
 
@@ -63,9 +77,9 @@ l_password = Label(text="Password:", font=FONT, bg=NAVY, fg=GRAY)
 l_password.grid(column=0, row=3)
 
 # Entries
-e_website = Entry(width=46, bg=GRAY)
+e_website = Entry(width=32, bg=GRAY)
 e_website.focus()
-e_website.grid(column=1, row=1, columnspan=2, pady=(5, 5))
+e_website.grid(column=1, row=1, pady=(5, 5))
 
 e_email = Entry(width=46, bg=GRAY)
 e_email.grid(column=1, row=2, columnspan=2, pady=(5, 5))
@@ -78,8 +92,11 @@ b_generate_password = Button(text="Generate", font=FONT, bg=GRAY, activebackgrou
                              command=password_generator)
 b_generate_password.grid(column=2, row=3, pady=(5, 5))
 
-b_add = Button(text="Add", font=FONT, width=34, bg=GRAY, activebackground=DARK_BLUE,
+b_add = Button(text="Add", font=FONT, width=35, bg=GRAY, activebackground=DARK_BLUE,
                command=password_saving)
 b_add.grid(column=1, row=4, columnspan=2, pady=(5, 5))
+
+b_search = Button(text="Search", font=FONT, bg=GRAY, activebackground=DARK_BLUE, width=8)
+b_search.grid(column=2, row=1, pady=(5, 5))
 
 window.mainloop()
