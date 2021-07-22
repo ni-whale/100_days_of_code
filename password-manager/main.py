@@ -65,9 +65,9 @@ def find_password():
                 messagebox.showinfo(title="Success", message=f'Email: {data[website]["email"]}]\n'
                                                              f'Password: {data[website]["password"]}')
                 pyperclip.copy(data[website]["password"])
-            else:
-                messagebox.showerror(title="Error",
-                                     message="Password for this site wasn't found. Please, try again")
+                break
+        else:
+            messagebox.showerror(title="Error", message="Password for this site wasn't found. Please, try again")
 
 # ---------------------------- DATA CLEAN UP ------------------------------- #
 
