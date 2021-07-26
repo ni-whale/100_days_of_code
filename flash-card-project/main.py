@@ -4,18 +4,26 @@ import random
 # ---------------------------- CONSTANTS ------------------------------- #
 BACKGROUND_COLOR = "#B1DDC6"
 
-# ---------------------------- LOGIC SETUP ------------------------------- #
+# # ---------------------------- LOGIC SETUP ------------------------------- #
+# df = pandas.read_csv("data/Words_eng+rus.csv")
+# data = df.to_dict()
+#
 # def generate_word():
-#     df = pandas.read_csv("data/Words_eng+rus.csv")
-#     data = df.to_dict()
-#     temp = [item for item in data[random.randint(0, 1110)]]
-#     print(temp)
+#     random_position = random.randint(0, 1112)
+#     random_word = data['Word'][random_position]
+#     translation = data['Translation'][random_position]
+#     canvas.itemconfig(c_lang_of_the_word, text="English")
+#     canvas.itemconfig(c_word, text=random_word)
 
 df = pandas.read_csv("data/Words_eng+rus.csv")
-data = df.to_dict()
-word, translation = random.choice(list(data.items()))
-print(f"{word}")
-print(f"{translation}")
+data = df.to_dict(orient="records")
+
+
+def next_card():
+    current_card = random.choice(data)
+    canvas.itemconfig(c_lang_of_the_word, text="English")
+    canvas.itemconfig(c_word, text=current_card['Word'])
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -32,11 +40,13 @@ canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons
 check_mark_img = PhotoImage(file="images/right.png")
-b_right = Button(image=check_mark_img,  highlightthickness=0)
+b_right = Button(image=check_mark_img, highlightthickness=0, command=next_card)
 b_right.grid(column=1, row=1)
 
 crisscross_img = PhotoImage(file="images/wrong.png")
-b_wrong = Button(image=crisscross_img,  highlightthickness=0)
+b_wrong = Button(image=crisscross_img, highlightthickness=0, command=next_card)
 b_wrong.grid(column=0, row=1)
+
+next_card()
 
 window.mainloop()
