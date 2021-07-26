@@ -5,24 +5,27 @@ import random
 BACKGROUND_COLOR = "#B1DDC6"
 
 # # ---------------------------- LOGIC SETUP ------------------------------- #
-# df = pandas.read_csv("data/Words_eng+rus.csv")
-# data = df.to_dict()
-#
-# def generate_word():
-#     random_position = random.randint(0, 1112)
-#     random_word = data['Word'][random_position]
-#     translation = data['Translation'][random_position]
-#     canvas.itemconfig(c_lang_of_the_word, text="English")
-#     canvas.itemconfig(c_word, text=random_word)
-
 df = pandas.read_csv("data/Words_eng+rus.csv")
 data = df.to_dict(orient="records")
+current_card = {}
+word_is_known = ""
 
 
 def next_card():
+    global current_card, flip_timer, word_is_known
+    window.after_cancel(flip_timer)
     current_card = random.choice(data)
-    canvas.itemconfig(c_lang_of_the_word, text="English")
-    canvas.itemconfig(c_word, text=current_card['Word'])
+    canvas.itemconfig(canvas_image, image=front_card_img)
+    canvas.itemconfig(c_lang_of_the_word, text="English", fill="Black")
+    canvas.itemconfig(c_word, text=current_card['Word'], fill="Black")
+    flip_timer = window.after(1500, func=flip_card)
+
+
+def flip_card():
+    global current_card
+    canvas.itemconfig(c_lang_of_the_word, text="Russian", fill="white")
+    canvas.itemconfig(c_word, text=current_card['Translation'], fill="white")
+    canvas.itemconfig(canvas_image, image=back_card_img)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -30,10 +33,13 @@ window = Tk()
 window.title("Flash cards")
 window.config(bg=BACKGROUND_COLOR, padx=50, pady=50)
 
+flip_timer = window.after(1500, func=flip_card)
+
 # Canvas
 canvas = Canvas(width=800, height=526, bg=BACKGROUND_COLOR, highlightthickness=0)
-card_img = PhotoImage(file="images/card_front.png")
-canvas.create_image(400, 263, image=card_img)
+front_card_img = PhotoImage(file="images/card_front.png")
+back_card_img = PhotoImage(file="images/card_back.png")
+canvas_image = canvas.create_image(400, 263, image=front_card_img)
 c_lang_of_the_word = canvas.create_text(400, 150, text="Title", font=("Arial", 30, "italic"))
 c_word = canvas.create_text(400, 263, text="Word", font=("Arial", 50, "bold"))
 canvas.grid(column=0, row=0, columnspan=2)
