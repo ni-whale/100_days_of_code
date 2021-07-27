@@ -10,7 +10,6 @@ df = pandas.read_csv("data/Words_eng+rus.csv")
 data = df.to_dict(orient="records")
 current_card = {}
 unknown_words = []
-new_df = pandas.DataFrame(unknown_words)
 
 
 def next_card():
@@ -31,15 +30,12 @@ def flip_card():
 
 
 def unknown_word():
-    global current_card, unknown_words, new_df
+    global current_card, unknown_words
     unknown_words.append(current_card)
-    # try:
-    #     new_df.to_csv("words_to_learn.scv", mode="a")
-    # except FileNotFoundError:
-    #     new_df.to_csv("words_to_learn.scv", mode="w")
-    # finally:
-    #     next_card()
-    print(unknown_words)
+    df = pandas.DataFrame(unknown_words)
+    df.to_csv('words_to_learn')
+
+    next_card()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
