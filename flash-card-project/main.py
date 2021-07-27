@@ -1,6 +1,7 @@
 from tkinter import *
 import pandas
 import random
+
 # ---------------------------- CONSTANTS ------------------------------- #
 BACKGROUND_COLOR = "#B1DDC6"
 
@@ -8,11 +9,12 @@ BACKGROUND_COLOR = "#B1DDC6"
 df = pandas.read_csv("data/Words_eng+rus.csv")
 data = df.to_dict(orient="records")
 current_card = {}
-word_is_known = ""
+unknown_words = []
+new_df = pandas.DataFrame(unknown_words)
 
 
 def next_card():
-    global current_card, flip_timer, word_is_known
+    global current_card, flip_timer
     window.after_cancel(flip_timer)
     current_card = random.choice(data)
     canvas.itemconfig(canvas_image, image=front_card_img)
@@ -26,6 +28,18 @@ def flip_card():
     canvas.itemconfig(c_lang_of_the_word, text="Russian", fill="white")
     canvas.itemconfig(c_word, text=current_card['Translation'], fill="white")
     canvas.itemconfig(canvas_image, image=back_card_img)
+
+
+def unknown_word():
+    global current_card, unknown_words, new_df
+    unknown_words.append(current_card)
+    # try:
+    #     new_df.to_csv("words_to_learn.scv", mode="a")
+    # except FileNotFoundError:
+    #     new_df.to_csv("words_to_learn.scv", mode="w")
+    # finally:
+    #     next_card()
+    print(unknown_words)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -50,7 +64,8 @@ b_right = Button(image=check_mark_img, highlightthickness=0, command=next_card)
 b_right.grid(column=1, row=1)
 
 crisscross_img = PhotoImage(file="images/wrong.png")
-b_wrong = Button(image=crisscross_img, highlightthickness=0, command=next_card)
+b_wrong = Button(image=crisscross_img, highlightthickness=0, command=unknown_word)
+
 b_wrong.grid(column=0, row=1)
 
 next_card()
