@@ -4,18 +4,23 @@ import random
 
 # ---------------------------- CONSTANTS ------------------------------- #
 BACKGROUND_COLOR = "#B1DDC6"
-
 # # ---------------------------- LOGIC SETUP ------------------------------- #
-df = pandas.read_csv("data/Words_eng+rus.csv")
-data = df.to_dict(orient="records")
 current_card = {}
-unknown_words = []
+to_learn = {}
+
+try:
+    data = pandas.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    original_data = pandas.read_csv("data/Words_eng+rus.csv")
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = data.to_dict(orient="records")
 
 
 def next_card():
     global current_card, flip_timer
     window.after_cancel(flip_timer)
-    current_card = random.choice(data)
+    current_card = random.choice(to_learn)
     canvas.itemconfig(canvas_image, image=front_card_img)
     canvas.itemconfig(c_lang_of_the_word, text="English", fill="Black")
     canvas.itemconfig(c_word, text=current_card['Word'], fill="Black")
@@ -29,12 +34,11 @@ def flip_card():
     canvas.itemconfig(canvas_image, image=back_card_img)
 
 
-def unknown_word():
-    global current_card, unknown_words
-    unknown_words.append(current_card)
-    df = pandas.DataFrame(unknown_words)
-    df.to_csv('words_to_learn')
-
+def is_known():
+    global current_card
+    to_learn.remove(current_card)
+    data = pandas.DataFrame(to_learn)
+    data.to_csv('data/words_to_learn.csv', index=False)
     next_card()
 
 
@@ -56,14 +60,32 @@ canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons
 check_mark_img = PhotoImage(file="images/right.png")
-b_right = Button(image=check_mark_img, highlightthickness=0, command=next_card)
+b_right = Button(image=check_mark_img, highlightthickness=0, command=is_known)
 b_right.grid(column=1, row=1)
 
 crisscross_img = PhotoImage(file="images/wrong.png")
-b_wrong = Button(image=crisscross_img, highlightthickness=0, command=unknown_word)
+b_wrong = Button(image=crisscross_img, highlightthickness=0, command=next_card)
 
 b_wrong.grid(column=0, row=1)
 
 next_card()
 
 window.mainloop()
+
+# # make messagebox available
+# from tkinter import messagebox
+#
+# # set callback for window close
+# window.protocol("WM_DELETE_WINDOW", save_files)
+#
+#
+# # window close callback function
+#
+# def save_files():
+#     # Prompt user for confirmation
+#     if messagebox.askokcancel(title="Goodbye", message="Update dictionary based on this session?"):
+#
+#     # File saving logic goes here.
+#     # Dict updating is in a separate function
+#
+#     window.destroy()
