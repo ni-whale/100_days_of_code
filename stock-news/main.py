@@ -1,13 +1,15 @@
 import requests
 import os
+from dotenv import load_dotenv
 
+load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 
-API_KEY = os.environ.get('STOCK_API_KEY')
+API_KEY = os.getenv('STOCK_API_KEY')
 stocl_parameters = {
     'function': 'TIME_SERIES_DAILY',
     'symbol': STOCK,
@@ -18,8 +20,13 @@ response = requests.get('https://www.alphavantage.co/query', params=stocl_parame
 response.raise_for_status()
 stock_data = response.json()
 print(stock_data)
-# for day in stock_data['Time Series (Daily)']:
-#     print(day['4. close'])
+last_two_days = list(stock_data['Time Series (Daily)'])[:2]
+for i in range(0, 2):
+    for record in stock_data['Time Series (Daily)'][last_two_days[i]]['4. close']:
+        print(record)
+
+
+# print(list(stock_data['Time Series (Daily)'])[-1])
 
 
 
