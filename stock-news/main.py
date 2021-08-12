@@ -2,10 +2,11 @@ import requests
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
-# STOCK = "TSLA"
-STOCK = "QBT"
-COMPANY_NAME = "Tesla Inc"
+STOCK = "TSLA"
+# STOCK = "QBT"
+COMPANY_NAME = "Tesla"
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
@@ -32,14 +33,26 @@ day_before_previous = closure_positions[1]
 difference_between_two_days = (abs(previous_day-day_before_previous) / previous_day * 100)  # calculating the difference in %
 # between 2 days
 
-if difference_between_two_days >= 5:
+if difference_between_two_days >= 0.1:
     print("Get news")
 else:
     print("The fluctuation was not interesting.")
 
-
 ## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME.
+
+NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+news_params = {
+    'q': COMPANY_NAME,
+    'apiKey': NEWS_API_KEY,
+    'language': 'en',
+    'pageSize': 3,
+}
+news_response = requests.get('https://newsapi.org//v2/everything', params=news_params)
+news_response.raise_for_status()
+news_data = news_response.json()
+print(news_data)
+
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
