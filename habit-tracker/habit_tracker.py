@@ -43,8 +43,19 @@ pixel_endpoint = f"{graph_endpoint}/{graph_id}"
 
 pixel_config = {
     'date': DT.datetime.today().strftime('%Y%m%d'),
-    'quantity': "1"
+    'quantity': "0.5"
 }
 
-response = requests.post(url=pixel_endpoint, json=pixel_config, headers=headers)
+# response = requests.post(url=pixel_endpoint, json=pixel_config, headers=headers)
+# print(response.text)
+
+yesterday = (DT.datetime.today() - DT.timedelta(days=1)).strftime('%Y%m%d')
+
+delete_endpoint = f"{pixel_endpoint}/{yesterday}"
+
+update_config = {
+    'quantity': "2"
+}
+
+response = requests.delete(url=delete_endpoint, headers=headers)
 print(response.text)
