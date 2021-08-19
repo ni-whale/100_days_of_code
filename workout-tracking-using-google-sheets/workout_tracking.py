@@ -15,16 +15,29 @@ headers = {
     'x-app-key': APP_KEY,
 }
 
-user_input = input("What exercise you did: ")
+# user_input = input("What exercise you did: ")
 
-exercise_params = {
-    "query": user_input
+# exercise_params = {
+#     "query": user_input
+# }
+
+# response = requests.post(url=exercise_endpoint, headers=headers, json=exercise_params)
+# response.raise_for_status()
+# print(response.text)
+
+adding_row_endpoint = "https://api.sheety.co/6f646ab411f639652d7483808719cf20/workoutTracking/workouts"
+
+# now = DT.datetime.now().strftime('%d/%m/%Y')
+now = DT.datetime.now().strftime("%X")
+# print(now)
+
+adding_row_params = {
+    'Date': DT.datetime.now().strftime('%d/%m/%Y'),
+    'Time': DT.datetime.now().strftime("%X")
 }
 
-response = requests.post(url=exercise_endpoint, headers=headers, json=exercise_params)
+response = requests.post(url=adding_row_endpoint, json=adding_row_params)
 response.raise_for_status()
 print(response.text)
-
-
 
 
