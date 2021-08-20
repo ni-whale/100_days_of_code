@@ -13,25 +13,26 @@ sheety_endpoint_adding_row = "https://api.sheety.co/6f646ab411f639652d7483808719
 
 APP_ID = os.getenv('NUTRITIONIX_APP_ID')
 APP_KEY = os.getenv('NUTRITIONIX_APP_KEY')
+SHEETY_TOKEN = os.getenv('SHEETY_TOKEN')
 
 # ---------------------------- LOGIC ------------------------------- #
 
 # Getting info about calories based on the exercise provided by the user. Natural language recognition done on the API side.
-headers = {
+headers_nutritionix = {
     'x-app-id': APP_ID,
     'x-app-key': APP_KEY,
 }
 
 user_input = input("What exercise you did: ")
-exercise_params = {
-    "query": user_input
-}
+exercise_params = {"query": user_input}
 
-response_nutritionix = requests.post(url=exercise_endpoint, headers=headers, json=exercise_params)
+response_nutritionix = requests.post(url=exercise_endpoint, headers=headers_nutritionix, json=exercise_params)
 response_nutritionix.raise_for_status()
 exercise_result = response_nutritionix.json()
 
 # Adding the last workout to the google sheet by using Sheety API
+
+headers_sheety = {f"Authorization": f"Bearer {SHEETY_TOKEN}"}
 
 current_date = DT.datetime.now().strftime('%d/%m/%Y')
 current_time = DT.datetime.now().strftime("%X")
@@ -49,8 +50,9 @@ sheety_body_post = {
     }
 }
 
-response_sheety = requests.post(sheety_endpoint_adding_row, json=sheety_body_post)
+response_sheety = requests.post(sheety_endpoint_adding_row, json=sheety_body_post, headers=headers_sheety)
 response_sheety.raise_for_status()
+print(response_sheety.text)
 
 
 
