@@ -4,4 +4,8 @@ from data_manager import DataManager
 
 data_manager = DataManager()
 
-data_manager.getting_list_of_cities()
+json_data = data_manager.getting_list_of_cities()['prices']
+
+for record in json_data:
+    print(record['city'])
+
