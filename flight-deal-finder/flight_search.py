@@ -21,7 +21,7 @@ class FlightSearch:
         self.body_request_get["term"] = town
         request = requests.get(url=self.tequila_endpoing_get, params=self.body_request_get, headers=self.header)
         request.raise_for_status()
-        city_data = request.json()
+        city_data = request.json()['locations']
         return city_data
 
 

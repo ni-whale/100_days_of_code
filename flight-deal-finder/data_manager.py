@@ -21,5 +21,5 @@ class DataManager:
     def getting_list_of_cities(self):
         sheety_get_response = requests.get(url=self.sheety_endpoint_get, headers=self.headers_sheety)
         sheety_get_response.raise_for_status()
-        return sheety_get_response.json()
+        return sheety_get_response.json()['prices']
 
