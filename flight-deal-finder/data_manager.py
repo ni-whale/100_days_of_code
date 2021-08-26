@@ -24,11 +24,11 @@ class DataManager:
     def updating_sheet_by_iata_codes(self, codes):
         for code in codes:
             self.row_id += 1
-            sheety_body = {"prices": {"iata code": code[0].lower()}}
+            sheety_body = {"price": {"iataCode": code[0].lower()}}
             self.sheety_endpoint_put = f"https://api.sheety.co/6f646ab411f639652d7483808719cf20/flightDeals/prices/{self.row_id}"
             print(f"{sheety_body}\n{self.sheety_endpoint_put}")
             sheety_put_response = requests.put(url=self.sheety_endpoint_put, headers=self.headers_sheety,
                                                json=sheety_body)
             sheety_put_response.raise_for_status()
-            print(sheety_put_response.text)
+
 
