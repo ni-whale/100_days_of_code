@@ -10,6 +10,7 @@ class FlightSearch:
     def __init__(self):
         tequila_api = os.getenv('TEQUILA_FLY_API')
         self.tequila_endpoing_get = "https://tequila-api.kiwi.com/locations/query"
+        self.tequila_enpoint_flights = "https://tequila-api.kiwi.com/v2/search"
         self.body_request_get = {
             "term": "",
             "location_types": "city",
