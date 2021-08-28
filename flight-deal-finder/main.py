@@ -10,6 +10,7 @@ flight_search = FlightSearch()
 
 # ---------------------------- GETTING IATA CODE FOR EACH CITY ------------------------------- #
 list_of_cities = []
+list_of_iata_codes = []
 all_codes_presented = True
 # adding city to the list in case if IATA code is not presented
 for record in data_manager.getting_list_of_cities():
@@ -17,7 +18,10 @@ for record in data_manager.getting_list_of_cities():
         list_of_cities.append(record['city'])
         all_codes_presented = False
     else:
+        if record not in list_of_iata_codes:
+            list_of_iata_codes.append(record['iataCode'])
         continue
+list_of_iata_codes = [code.upper() for code in list_of_iata_codes]  # for use in flights search
 while not all_codes_presented:
     # Getting the whole info about each city from the list
     iata_search_data_collector = [flight_search.iata_search(city) for city in list_of_cities]
@@ -27,6 +31,8 @@ while not all_codes_presented:
                                   and record["code"] is not None])
     data_manager.updating_sheet_by_iata_codes(getting_iata_code)  # Updating the spreadsheet by info we got
     all_codes_presented = True
+
+print(flight_search.flights_seardh(*list_of_iata_codes))
 
 # TODO Use the Flight Search API to check for the cheapest flights from tomorrow to 6 months later for all the cities
 #  in the Google Sheet.

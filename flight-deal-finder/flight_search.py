@@ -11,19 +11,25 @@ class FlightSearch:
         tequila_api = os.getenv('TEQUILA_FLY_API')
         self.tequila_endpoing_get = "https://tequila-api.kiwi.com/locations/query"
         self.tequila_enpoint_flights = "https://tequila-api.kiwi.com/v2/search"
-        self.body_request_get = {
+        self.body_request_get_iata = {
             "term": "",
             "location_types": "city",
         }
-        self.header ={"accept": "application/json", "apikey": tequila_api}
+        self.header = {"accept": "application/json", "apikey": tequila_api}
 
 
     def iata_search(self, town):
-        self.body_request_get["term"] = town
-        request = requests.get(url=self.tequila_endpoing_get, params=self.body_request_get, headers=self.header)
+        self.body_request_get_iata["term"] = town
+        request = requests.get(url=self.tequila_endpoing_get, params=self.body_request_get_iata, headers=self.header)
         request.raise_for_status()
         city_data = request.json()['locations']
         return city_data
 
+    def flights_seardh(self, *iata_codes):
+        # body_request_get_flights = {
+        #     "fly_from": "OZH",
+        #     "fly_to": ""
+        # }
+        print(f"'fly_to': {str(iata_codes)}")
 
 
