@@ -1,6 +1,8 @@
 from dotenv import load_dotenv
 import os
 import requests
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 
 # ---------------------------- PATHs ------------------------------- #
 load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
@@ -16,6 +18,12 @@ class FlightSearch:
             "location_types": "city",
         }
         self.header = {"accept": "application/json", "apikey": tequila_api}
+        # .strftime("%d/%m/%Y")
+        day = datetime.today().day
+        month = datetime.today().month
+        year = datetime.today().year
+        self.today = f"{day}/{month}/{year}"
+        self.six_moth_later = (date(year, month, day) + relativedelta(months=+6)).strftime("%d/%m/%Y")
 
 
     def iata_search(self, town):
@@ -25,11 +33,21 @@ class FlightSearch:
         city_data = request.json()['locations']
         return city_data
 
-    def flights_seardh(self, *iata_codes):
-        # body_request_get_flights = {
-        #     "fly_from": "OZH",
-        #     "fly_to": ""
-        # }
-        print(f"'fly_to': {str(iata_codes)}")
+    def flights_searh(self, iata_codes):
+        body_request_get_flights = {
+            "fly_from": "OZH",
+            "fly_to": iata_codes[3],
+            "date_from": self.today,
+            "date_to": self.six_moth_later,
+            "adults": 2,
+            "adult_hold_bag": "1,0",
+            "curr": "UAH",
+        }
+        request = requests.get(url=self.tequila_enpoint_flights, params=body_request_get_flights, headers=self.header)
+        request.raise_for_status()
+        flights_data = request.text
+        return flights_data
+
+
 
 

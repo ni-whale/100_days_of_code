@@ -32,7 +32,7 @@ while not all_codes_presented:
     data_manager.updating_sheet_by_iata_codes(getting_iata_code)  # Updating the spreadsheet by info we got
     all_codes_presented = True
 
-print(flight_search.flights_seardh(*list_of_iata_codes))
+print(flight_search.flights_searh(list_of_iata_codes))
 
 # TODO Use the Flight Search API to check for the cheapest flights from tomorrow to 6 months later for all the cities
 #  in the Google Sheet.
