@@ -1,8 +1,10 @@
 from data_manager import DataManager
 from flight_search import FlightSearch
+from flight_data import FlightData
 
 data_manager = DataManager()
 flight_search = FlightSearch()
+flight_data = FlightData()
 
 # TODO Use the Flight Search and Sheety API to populate your own copy of the Google Sheet with International Air
 #  Transport Association (IATA) codes for each city.Most of the cities in the sheet include multiple airports,
@@ -32,7 +34,15 @@ while not all_codes_presented:
     data_manager.updating_sheet_by_iata_codes(getting_iata_code)  # Updating the spreadsheet by info we got
     all_codes_presented = True
 
-print(flight_search.flights_searh(list_of_iata_codes))
+# print(flight_search.flights_searh(list_of_iata_codes))
+
+for iata_code in list_of_iata_codes:
+    # print(flight_search.flights_searh(iata_code))
+    flight_data.flights_data_for_all_locations.append(flight_search.flights_searh(iata_code))
+
+for record in flight_data.flights_data_for_all_locations:
+    with open("flightdata.txt", "w") as data_file:
+        data_file.writelines(record)
 
 # TODO Use the Flight Search API to check for the cheapest flights from tomorrow to 6 months later for all the cities
 #  in the Google Sheet.

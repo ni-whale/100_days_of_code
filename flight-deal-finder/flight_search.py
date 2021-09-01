@@ -33,10 +33,10 @@ class FlightSearch:
         city_data = request.json()['locations']
         return city_data
 
-    def flights_searh(self, iata_codes):
+    def flights_searh(self, iata_code):
         body_request_get_flights = {
             "fly_from": "OZH",
-            "fly_to": iata_codes[3],
+            "fly_to": iata_code,
             "date_from": self.today,
             "date_to": self.six_moth_later,
             "adults": 2,
@@ -45,7 +45,7 @@ class FlightSearch:
         }
         request = requests.get(url=self.tequila_enpoint_flights, params=body_request_get_flights, headers=self.header)
         request.raise_for_status()
-        flights_data = request.text
+        flights_data = request.json()['data']
         return flights_data
 
 
