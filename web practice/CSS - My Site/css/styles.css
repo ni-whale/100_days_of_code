@@ -56,6 +56,10 @@ a {
   font-weight: normal;
 }
 
+.skills {
+  margin-bottom: 100px;
+}
+
 .skill-row {
   width: 50%;
   margin: 100px auto 100px auto;
@@ -73,5 +77,4 @@ a {
   width: 25%;
   float: right;
   margin-left: 30px;
-  margin-bottom: 10px;
 }
