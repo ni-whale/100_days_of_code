@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup
+import requests
 
-with open("website.html", "r") as data_file:
-    contents = data_file.read()
+response = requests.get("https://news.ycombinator.com/")
+yc_web_page = response.text
 
-print(contents)
+soup = BeautifulSoup(yc_web_page, "html.parser")
+
+links = 
