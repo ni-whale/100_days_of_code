@@ -16,7 +16,12 @@ for article_tag in articles:
     link = article_tag.get("href")
     articles_links.append(link)
 
-article_upvotes = [score.getText() for score in soup.find_all(name="span", class_="score")]
+article_upvotes = [int(score.getText().split()[0]) for score in soup.find_all(name="span", class_="score")]
 
-for i in range(len(articles)):
-    print(f"{articles_texts[i]} - {articles_links[i]}, Score: {article_upvotes[i]}")
+temp1 = 0
+for i in range(len(article_upvotes)):
+    if article_upvotes[i] > temp1:
+        temp1 = article_upvotes[i]
+
+temp = article_upvotes.index(temp1)
+print(f"{articles_texts[temp]} - {articles_links[temp]}, Score: {article_upvotes[temp]}")
