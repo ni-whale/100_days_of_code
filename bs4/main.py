@@ -28,9 +28,9 @@ import requests
 
 from requests_html import HTMLSession
 
-WEB_PAGE = "https://www.empireonline.com/movies/features/best-movies-2/"
-WEB_FILE = "100_best_movies.html"
-
+# WEB_PAGE = "https://www.empireonline.com/movies/features/best-movies-2/"
+# WEB_FILE = "100_best_movies.html"
+#
 #
 # # Using requests_html to render JavaScript
 # def get_web_page():
@@ -71,10 +71,20 @@ movies_list_origin = [movie.getText().split(") ") for movie in soup.find_all(nam
 movies_list_origin.reverse()
 movie_list = []
 for movie in range(len(movies_list_origin)):
-    for record in movies_list_origin[movie]:
-        print(record)
+    if len(movies_list_origin[movie]) == 2:
+        movie_list.append(movies_list_origin[movie][1])
+    else:
+        movie_list.append(movies_list_origin[movie][0])
+
+i = 0
+for movie in movie_list:
+    i = i + 1
+    if movie == "12: The Godfather Part II":
+        print(f"{i}) The Godfather Part II")
+    else:
+        print(f"{i}) {movie}")
 
 
-print("--------------------------")
-print(movies_list_origin)
+# print("--------------------------")
+# print(movies_list_origin)
 
