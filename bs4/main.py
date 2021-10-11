@@ -69,20 +69,22 @@ with open("100_best_movies.html", "r") as web_page:
 movies_list_origin = [movie.getText().split(") ") for movie in soup.find_all(name="h3", class_="jsx-4245974604")]
 
 movies_list_origin.reverse()
-movie_list = []
+movie_list_transit = []
 for movie in range(len(movies_list_origin)):
     if len(movies_list_origin[movie]) == 2:
-        movie_list.append(movies_list_origin[movie][1])
+        movie_list_transit.append(movies_list_origin[movie][1])
     else:
-        movie_list.append(movies_list_origin[movie][0])
+        movie_list_transit.append(movies_list_origin[movie][0])
 
 i = 0
-for movie in movie_list:
-    i = i + 1
-    if movie == "12: The Godfather Part II":
-        print(f"{i}) The Godfather Part II")
-    else:
-        print(f"{i}) {movie}")
+with open("movies.txt", "w") as movies_list:
+
+    for movie in movie_list_transit:
+        i = i + 1
+        if movie == "12: The Godfather Part II":
+            movies_list.write(f"{i}) The Godfather Part II\n")
+        else:
+            movies_list.write(f"{i}) {movie}\n")
 
 
 # print("--------------------------")
