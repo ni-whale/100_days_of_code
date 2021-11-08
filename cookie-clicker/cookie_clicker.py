@@ -1,27 +1,21 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from cookie_interface import CookieInterface
 import time
 
-service = Service("/home/ni_whale/Documents/Working_space/projects/chromedriver_linux64/chromedriver")
-driver = webdriver.Chrome(service=service)
+cookie_interface = CookieInterface()
 
-driver.get("http://orteil.dashnet.org/experiments/cookie/")
+estimated_time = time.time() + 60.0
+shopping_time = time.time() + 5.0
 
-current_time = time.time()
-estimated_time = current_time + 60.0
-shopping_time = current_time + 5.0
-
-cookie_button = driver.find_element(By.CSS_SELECTOR, "#cookie")
-
-print(f"estimated time = {estimated_time} | shopping_time = {shopping_time}")
+# print(f"estimated time = {estimated_time} | shopping_time = {shopping_time}")
 
 while time.time() < estimated_time:
-    cookie_button.click()
+    cookie_interface.cookie_button_click()
     if time.time() > shopping_time:
-        print("time to buy something")
+        for menu_item in cookie_interface.get_cookie_menu():
+            if int(cookie_interface.get_money()) >= int(menu_item[1]):
+                print(f"You should buy: {menu_item}")
         shopping_time = time.time() + 5.0
-        print(f"new shopping time = {shopping_time}")
+        # print(f"new shopping time = {shopping_time}")
 
-driver.quit()
+cookie_interface.quit()
+
