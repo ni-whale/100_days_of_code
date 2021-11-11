@@ -1,10 +1,17 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from tinder_interface import TinderInterface
+from dotenv import load_dotenv
+import os
 
-service = Service("/home/ni_whale/Documents/Working_space/projects/chromedriver_linux64/chromedriver")
-driver = webdriver.Chrome(service=service)
-driver.get("https://tinder.com/")
+# ---------------------------- CONSTANTS ------------------------------- #
+load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
 
-login_button = driver.find_element(By.CSS_SELECTOR, "#Pos(r) Z(1)").click()
+EMAIL = os.getenv('EMAIL')
+PASSWORD = os.getenv('PASSWORD')
+
+# ---------------------------- MAIN ------------------------------- #
+tinder_interface = TinderInterface()
+
+tinder_interface.login(EMAIL, PASSWORD)
+
+
+
