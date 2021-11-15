@@ -13,5 +13,11 @@ tinder_interface = TinderInterface()
 
 tinder_interface.login(EMAIL, PASSWORD)
 
+for _ in range(10):
+    tinder_interface.auto_like()
+
+
+
+
 
 
