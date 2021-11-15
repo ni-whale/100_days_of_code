@@ -55,13 +55,19 @@ class TinderInterface:
             sleep(2)
             try:
                 add_home_dismiss = self.driver.find_element(By.CSS_SELECTOR,
-                    "#t--149300558 > div > div > div.Pt\(12px\).Pb\(8px\).Px\(36px\).Px\(24px\)--s > button.button.Lts\(\$ls-s\).Z\(0\).CenterAlign.Mx\(a\).Cur\(p\).Tt\(u\).Ell.Bdrs\(100px\).Px\(24px\).Px\(20px\)--s.Py\(0\).Mih\(42px\)--s.Mih\(50px\)--ml.C\(\$c-secondary\).C\(\$c-base\)\:h.Fw\(\$semibold\).focus-button-style.D\(b\).Mx\(a\)")
+                    "#u1408193709 > div > div > div.Pt\(12px\).Pb\(8px\).Px\(36px\).Px\(24px\)--s > button.button.Lts\(\$ls-s\).Z\(0\).CenterAlign.Mx\(a\).Cur\(p\).Tt\(u\).Ell.Bdrs\(100px\).Px\(24px\).Px\(20px\)--s.Py\(0\).Mih\(42px\)--s.Mih\(50px\)--ml.C\(\$c-secondary\).C\(\$c-base\)\:h.Fw\(\$semibold\).focus-button-style.D\(b\).Mx\(a\)")
                 add_home_dismiss.click()
                 sleep(2)
             except:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_RIGHT)
         except ElementClickInterceptedException:
-            self.driver.find_element(By.XPATH, self.buttons_collection["back_to_tinder"]).click()
+            try:
+                self.driver.find_element(By.XPATH, self.buttons_collection["back_to_tinder"]).click()
+                sleep(2)
+            except:
+                print("Take a rest.")
+                self.driver.quit()
+
 
     def quit(self):
         self.driver.quit()
