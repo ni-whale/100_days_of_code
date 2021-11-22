@@ -1,13 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from urllib.request import urlopen
-from selenium import webdriver
-import time
-from selenium import webdriver
-from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+
 
 class ZillowInterface:
     def __init__(self):
@@ -35,33 +28,17 @@ class ZillowInterface:
             "Accept-Language": "en-US,en;q=0.9"
         }
 
-        service = Service("/home/ni_whale/Documents/Working_space/projects/chromedriver_linux64/chromedriver")
-        driver = webdriver.Chrome(service=service)
-        driver.get(links_collection[0])
-        time.sleep(10)
-        html = driver.find_element(By.TAG_NAME, 'html')
-        html.send_keys(Keys.END)
-        htmlSource = driver.page_source
-
-        # self.response = requests.get(links_collection[0], headers=headers)
-        # zillow_web_page = self.response.text
-        # print(zillow_web_page)
-        self.soup = BeautifulSoup(htmlSource, "html.parser")
-        # self.soup = BeautifulSoup(zillow_web_page, "html.parser")
-
+        self.response = requests.get(links_collection[0], headers=headers)
+        zillow_web_page = self.response.text
+        self.soup = BeautifulSoup(zillow_web_page, "html.parser")
 
     def find_elements(self):
         list_of_results = self.soup.find_all(name="ul", class_="photo-cards")
         for item in list_of_results:
-            li = self.soup.find_all(name="li")
-
-        for item in li:
             prices = self.soup.find_all(name="div", class_="list-card-price")
-        print(len(prices))
+            address = self.soup.find_all(name="address", class_="list-card-addr")
+            links = self.soup.find_all(name="a", class_="list-card-link")
+        for link in links:
+            print(link['href'])
 
-        #
-        # for price in prices:
-        #     print(price.text)
 
-
-        # print(list_of_results)
