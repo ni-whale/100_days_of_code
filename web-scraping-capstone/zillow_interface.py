@@ -38,19 +38,18 @@ class ZillowInterface:
             links = self.soup.find_all(name="a", class_="list-card-link")
 
         for address in addresses:
-            print(address)
+            self.addresses.append(address.text)
 
+        for link in links:
+            if re.match("/b/", link['href']):
+                self.links.append(f"https://www.zillow.com{link['href']}")
+            else:
+                self.links.append(link['href'])
+        self.links = set(self.links)
+        self.links = list(self.links)
 
-        # for link in links:
-        #     if re.match("/b/", link['href']):
-        #         links.append(f"https://www.zillow.com{link['href']}")
-        #     else:
-        #         links.append(link['href'])
-        # self.links = set(self.links)
-        # self.links = list(self.links)
-        #
-        # for price in prices:
-        #     prices.append(price.text)
+        for price in prices:
+            self.prices.append(price.text)
 
 
 
