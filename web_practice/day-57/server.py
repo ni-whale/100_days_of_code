@@ -12,7 +12,7 @@ def home():
     year = datetime.now().year
     name = "Nikita B."
     # return render_template("index.html", num=random_number, year=year, name=name)
-    return "Hello, World!"
+    return render_template("index.html", name=name.title())
 
 @app.route('/guess/<name>')
 def guess(name):
@@ -21,8 +21,8 @@ def guess(name):
 
     return render_template("index.html", name=name.title(), age=age_result, gender=gender_result)
 
-@app.route('/blog')
-def blog():
+@app.route('/blog/<num>')
+def get_blog(num):
     blog_url = 'https://api.npoint.io/c790b4d5cab58020d391'
     response = requests.get(blog_url)
     all_posts = response.json()
