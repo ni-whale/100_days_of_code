@@ -24,16 +24,24 @@
     </div>
     <div class="content">
         <div class="card">
-            <h2>Another blog post</h2>
-            <p class="text">Lorem ipsum dolor sit </p>
-            <a href="#">Read</a>
+            {% for blog_post in posts: %}
+                {%if blog_post['id'] == 2:%}
+                    <h2>{{ blog_post['title'] }}</h2>
+                    <p class="text">{{ blog_post['subtitle'] }}</p>
+                    <a href="{{ url_for('get_blog', post_id=blog_post['id']) }}">Read</a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
     <div class="content">
         <div class="card">
-            <h2>Another blog post</h2>
-            <p class="text">Lorem ipsum dolor sit </p>
-            <a href="#">Read</a>
+            {% for blog_post in posts: %}
+                {%if blog_post['id'] == 3:%}
+                    <h2>{{ blog_post['title'] }}</h2>
+                    <p class="text">{{ blog_post['subtitle'] }}</p>
+                    <a href="{{ url_for('get_blog', post_id=blog_post['id']) }}">Read</a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </div>
