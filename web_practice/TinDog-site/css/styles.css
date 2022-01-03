@@ -146,3 +146,31 @@ p {
 .pricing-column {
   padding: 3% 2%;
 }
+
+@media (max-width: 1028px) {
+
+  #title {
+    text-align: center;
+  }
+
+  .title-image {
+    position: static;
+    transform: rotate(0);
+  }
+
+}
+
+/* Call to Actions section */
+
+#cta {
+  text-align: center;
+  background-color: #ff4c68;
+  color: #fff;
+  padding-top: 5%;
+}
+
+.cta-title {
+  font-weight: 900;
+  font-size: 3.5rem;
+  width: 70%;
+}
