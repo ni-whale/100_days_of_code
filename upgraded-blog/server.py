@@ -9,7 +9,7 @@ all_posts = response.json()
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", posts=all_posts)
 
 @app.route('/about')
 def about():
@@ -20,9 +20,11 @@ def contact():
     return render_template("contact.html")
 
 
-
-
-
+@app.route('/post/<post_id>')
+def get_blog(post_id):
+    for uni_post in all_posts:
+        if uni_post['id'] == int(post_id):
+            return render_template("post.html", post=uni_post)
 
 
 if __name__ == "__main__":
