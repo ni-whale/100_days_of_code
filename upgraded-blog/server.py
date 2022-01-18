@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
@@ -25,6 +25,21 @@ def get_blog(post_id):
     for uni_post in all_posts:
         if uni_post['id'] == int(post_id):
             return render_template("post.html", post=uni_post)
+
+@app.route("/form-entry", methods=["POST", "GET"])
+def receive_data():
+    if request.method == 'GET':
+        return render_template("contact.html")
+
+    name = request.form['name']
+    email = request.form['email']
+    phone = request.form['phone']
+    message = request.form['message']
+
+    if name != "" or email != "" or phone != "" or message != "":
+        print(f"{name}\n{email}\n{phone}\n{message}")
+        return "<h1>Successfully sent your message</h1>"
+
 
 
 if __name__ == "__main__":
