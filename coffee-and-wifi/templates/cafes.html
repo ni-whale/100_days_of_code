@@ -9,7 +9,9 @@
     <div class="col-sm-12">
 
       <h1>All Cafes</h1>
-
+        {% for row in cafes %}
+            <p>{{ row }}</p>
+        {% endfor %}
 	  <table class="table">
           <!-- This is where you will write the code to render a Bootstrap 
           Table that contains all the information from the 
