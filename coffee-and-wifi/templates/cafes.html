@@ -9,17 +9,33 @@
     <div class="col-sm-12">
 
       <h1>All Cafes</h1>
-        {% for row in cafes %}
-            <p>{{ row }}</p>
-        {% endfor %}
+
 	  <table class="table">
           <!-- This is where you will write the code to render a Bootstrap 
           Table that contains all the information from the 
           cafe-data.csv file. -->
+        <thead>
+          <tr>
+            {% for row in cafes[0] %}
+              <th scope="col">{{ row }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for cafe in cafes[1::] %}
+            <tr>
+              {% for row in cafe %}
+                {% for row_element in row %}
+                  {% if row_element[1]: %}
+                    <a href="{{ row_element[1] }}">Maps link</a>
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
   	  </table>
-
       <p><a href="{{ url_for('home') }}">Return to index page</a></p>
-
     </div>
   </div>
 </div>
