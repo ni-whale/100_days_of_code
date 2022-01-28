@@ -1,5 +1,10 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block styles %}
+{{ super() }}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
 {% block title %}Restaurants{% endblock %}
 
 {% block content %}
@@ -22,14 +27,14 @@
           </tr>
         </thead>
         <tbody>
-          {% for cafe in cafes[1::] %}
+          {% for row in cafes[1::] %}
             <tr>
-              {% for row in cafe %}
-                {% for row_element in row %}
-                  {% if row_element[1]: %}
-                    <a href="{{ row_element[1] }}">Maps link</a>
-                  {% endif %}
-                {% endfor %}
+              {% for row_element in row %}
+                {% if row.index(row_element) == 1: %}
+                  <td><a href="{{ row_element }}">Maps link</a></td>
+                {% else %}
+                  <td>{{ row_element }}</td>
+                {% endif %}
               {% endfor %}
             </tr>
           {% endfor %}
