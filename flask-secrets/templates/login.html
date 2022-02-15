@@ -1,29 +1,46 @@
-<!DOCTYPE HTML>
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<html>
-	<head>
-		<title>Login</title>
-	</head>
-	<body>
-        <div class="container">
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="container">
 		<h1>Login</h1>
-        <!-- This is where our form will go. -->
-			<form action="{{ url_for('login') }}" method="POST" novalidate>
-				{{ form.csrf_token }}
-				<p>
-					{{ form.email.label }} <br> {{ form.email(size=30) }}
-					{% for err in form.email.errors %}
-					<span style="color:red">{{ err }}</span>
-					{% endfor %}
-				</p>
-				<p>
-					{{ form.password.label }} <br> {{ form.password(size=30) }}
-					{% for err in form.password.errors %}
-					<span style="color:red">{{ err }}</span>
-					{% endfor %}
-				</p>
-				{{ form.submit }}
-			</form>
-        </div>
-	</body>
-</html>
+        {{ wtf.quick_form(form) }}
+    </div>
+{% endblock %}
+
+
+<!--<!DOCTYPE HTML>-->
+
+<!--<html>-->
+<!--	<head>-->
+<!--		<title>Login</title>-->
+<!--	</head>-->
+<!--	<body>-->
+<!--        <div class="container">-->
+<!--		<h1>Login</h1>-->
+<!--        &lt;!&ndash; This is where our form will go. &ndash;&gt;-->
+<!--&lt;!&ndash;			<form action="{{ url_for('login') }}" method="POST" novalidate>&ndash;&gt;-->
+<!--&lt;!&ndash;				{{ form.csrf_token }}&ndash;&gt;-->
+<!--&lt;!&ndash;				<p>&ndash;&gt;-->
+<!--&lt;!&ndash;					{{ form.email.label }} <br> {{ form.email(size=30) }}&ndash;&gt;-->
+<!--&lt;!&ndash;					{% for err in form.email.errors %}&ndash;&gt;-->
+<!--&lt;!&ndash;					<span style="color:red">{{ err }}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;					{% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;				</p>&ndash;&gt;-->
+<!--&lt;!&ndash;				<p>&ndash;&gt;-->
+<!--&lt;!&ndash;					{{ form.password.label }} <br> {{ form.password(size=30) }}&ndash;&gt;-->
+<!--&lt;!&ndash;					{% for err in form.password.errors %}&ndash;&gt;-->
+<!--&lt;!&ndash;					<span style="color:red">{{ err }}</span>&ndash;&gt;-->
+<!--&lt;!&ndash;					{% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;				</p>&ndash;&gt;-->
+<!--&lt;!&ndash;				{{ form.submit }}&ndash;&gt;-->
+<!--			{{ wtf.quick_form(form) }}-->
+<!--			</form>-->
+<!--        </div>-->
+<!--	</body>-->
+<!--</html>-->
+
