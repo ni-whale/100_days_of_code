@@ -7,9 +7,9 @@
 <body>
 <h1>My Library</h1>
     {% for record in all_books %}
-        {% for book in record%}
+        {% for value in record.values()%}
             <ul>
-                <li>{{ book['title'] }}</li>
+                <li>{{ value }}</li>
             </ul>
         {% endfor %}
     {% endfor %}
