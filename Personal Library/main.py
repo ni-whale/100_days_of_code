@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+
 # from sqlalchemy_utils.functions import database_exists
 
 app = Flask(__name__)
@@ -36,14 +37,20 @@ def home():
 def add():
     if request.method == "POST":
         new_book = Book(
-                title=request.form['book_name'],
-                author=request.form['book_author'],
-                rating=request.form['rating']
+            title=request.form['book_name'],
+            author=request.form['book_author'],
+            rating=request.form['rating']
         )
         db.session.add(new_book)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('add.html')
+
+
+@app.route("/edit/<book_id>", methods=['GET', 'POST'])
+def edit(book_id):
+    book_by_id = Book.query.get(book_id)
+    return render_template('edit.html', book=book_by_id)
 
 
 if __name__ == "__main__":
