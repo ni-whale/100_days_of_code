@@ -9,5 +9,9 @@
     <h2>Book name: {{ book.title }}</h2>
     <h2>Current rating: {{ book.rating }}</h2>
     {% endif %}
+    <form action="edit" method="POST">
+        <input type="text" name="n_rating" placeholder="New rating">
+        <button type="submit">Change rating</button>
+    </form>
 </body>
 </html>
