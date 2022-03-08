@@ -24,12 +24,12 @@ class Book(db.Model):
 
 
 # db.create_all()
-all_books = db.session.query(Book).all()
+# all_books = db.session.query(Book).all()
 
 
 @app.route('/')
 def home():
-    print(all_books)
+    all_books = db.session.query(Book).all()
     return render_template("index.html", books=all_books)
 
 
@@ -50,15 +50,21 @@ def add():
 @app.route("/edit/<book_id>", methods=['GET', 'POST'])
 def edit(book_id):
     book_by_id = Book.query.get(book_id)
-    print(book_by_id.rating)
     if request.method == "POST":
-        new_rating = request.form['n_rating']
-        book_by_id.rating = float(new_rating)
+        book_id = request.form["id"]
+        book_to_update = Book.query.get(book_id)
+        book_to_update.rating = request.form["rating"]
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('edit.html', book=book_by_id)
 
 
+@app.route("/delete/<book_id>")
+def delete(book_id):
+    book_to_delete = Book.query.get(book_id)
+    db.session.delete(book_to_delete)
+    db.session.commit()
+    return redirect(url_for('home'))
 
 if __name__ == "__main__":
     app.run(debug=True)
