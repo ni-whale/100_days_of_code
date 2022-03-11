@@ -6,6 +6,12 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
 
+
+class EditForm(FlaskForm):
+    rating = StringField(label="Your Rating Out of 10 e.g. 7.5", validators=[DataRequired()])
+    review = StringField(label="Your Review", validators=[DataRequired()])
+    submit = SubmitField(label="Done")
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///movie-collection.db"
@@ -47,6 +53,19 @@ def home():
     # db.session.commit()
     all_movies = db.session.query(Movie).all()
     return render_template("index.html", movies=all_movies)
+
+
+@app.route("/edit/<movie_id>", methods=['GET', 'POST'])
+def edit(movie_id):
+    form = EditForm()
+    movie_by_id = Movie.query.get(movie_id)
+    if request.method == "POST":
+        movie_to_update = Movie.query.get(movie_id)
+        movie_to_update.rating = form.rating.data
+        movie_to_update.review = form.review.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('edit.html', movie=movie_by_id, form=form)
 
 
 if __name__ == '__main__':

@@ -29,10 +29,10 @@
         </div>
           <p class="review">{{ movie.review }}</p>
         <p class="overview">{{ movie.description }}</p>
-    {% endfor %}
-        <a href="#" class="button">Update</a>
-        <a href="#" class="button delete-button">Delete</a>
 
+        <a href="{{ url_for('edit', movie_id=movie.id) }}" class="button">Update</a>
+        <a href="#" class="button delete-button">Delete</a>
+    {% endfor %}
       </div>
     </div>
   </div>
