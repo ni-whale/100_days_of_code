@@ -12,6 +12,12 @@ class EditForm(FlaskForm):
     review = StringField(label="Your Review", validators=[DataRequired()])
     submit = SubmitField(label="Done")
 
+
+class AddForm(FlaskForm):
+    title = StringField(label="Movie title", validators=[DataRequired()])
+    submit = SubmitField(label="Add Movie")
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///movie-collection.db"
@@ -19,6 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///movie-collection.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Bootstrap(app)
 db = SQLAlchemy(app)
+
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,32 +47,38 @@ class Movie(db.Model):
 
 @app.route("/")
 def home():
-    # new_movie = Movie(
-    #     title="Phone Booth",
-    #     year=2002,
-    #     description="Publicist Stuart Shepard finds himself trapped in a phone booth, pinned down by an extortionist's sniper rifle. Unable to leave or receive outside help, Stuart's negotiation with the caller leads to a jaw-dropping climax.",
-    #     rating=7.3,
-    #     ranking=10,
-    #     review="My favourite character was the caller.",
-    #     img_url="https://image.tmdb.org/t/p/w500/tjrX2oWRCM3Tvarz38zlZM7Uc10.jpg"
-    # )
-    # db.session.add(new_movie)
-    # db.session.commit()
     all_movies = db.session.query(Movie).all()
     return render_template("index.html", movies=all_movies)
 
 
 @app.route("/edit/<movie_id>", methods=['GET', 'POST'])
 def edit(movie_id):
-    form = EditForm()
+    edit_form = EditForm()
     movie_by_id = Movie.query.get(movie_id)
     if request.method == "POST":
         movie_to_update = Movie.query.get(movie_id)
-        movie_to_update.rating = form.rating.data
-        movie_to_update.review = form.review.data
+        movie_to_update.rating = edit_form.rating.data
+        movie_to_update.review = edit_form.review.data
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template('edit.html', movie=movie_by_id, form=form)
+    return render_template('edit.html', movie=movie_by_id, form=edit_form)
+
+
+@app.route("/delete/<movie_id>")
+def delete(movie_id):
+    movie_by_id = Movie.query.get(movie_id)
+    db.session.delete(movie_by_id)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route("/add", methods=['GET', 'POST'])
+def add():
+    add_form = AddForm()
+    if request.method == "POST":
+        print(add_form.title.data)
+        return redirect(url_for('home'))
+    return render_template('add.html', form=add_form)
 
 
 if __name__ == '__main__':
