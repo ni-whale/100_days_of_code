@@ -5,6 +5,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
+TMDB_API = "https://api.themoviedb.org/3/search/movie"
+TMDB_API_KEY = os.getenv('TMDB_API_KEY')
+TMDB_BEARER_TOKEN = os.getenv('TMDB_BEARER_TOKEN')
 
 
 class EditForm(FlaskForm):
@@ -72,11 +80,21 @@ def delete(movie_id):
     return redirect(url_for('home'))
 
 
+
 @app.route("/add", methods=['GET', 'POST'])
 def add():
     add_form = AddForm()
     if request.method == "POST":
+        print(TMDB_API_KEY)
         print(add_form.title.data)
+        TMDB_query = {
+            'api_key': TMDB_API_KEY,
+            'query': add_form.title.data
+        }
+        response = requests.get(TMDB_API, params=TMDB_query)
+        response.raise_for_status()
+        movie_list = response.json()
+        print(movie_list)
         return redirect(url_for('home'))
     return render_template('add.html', form=add_form)
 
