@@ -83,10 +83,10 @@ def delete(movie_id):
 
 @app.route("/add", methods=['GET', 'POST'])
 def add():
+    search_sersult = []
     add_form = AddForm()
     if request.method == "POST":
-        print(TMDB_API_KEY)
-        print(add_form.title.data)
+
         TMDB_query = {
             'api_key': TMDB_API_KEY,
             'query': add_form.title.data
@@ -94,8 +94,13 @@ def add():
         response = requests.get(TMDB_API, params=TMDB_query)
         response.raise_for_status()
         movie_list = response.json()
+
         print(movie_list)
-        return redirect(url_for('home'))
+        unfiltered_search_result = movie_list['results']
+        print(unfiltered_search_result)
+        for movie in unfiltered_search_result:
+            search_sersult.append(f"{movie['original_title']} - {movie['release_date']}")
+        return render_template('select.html', movies=search_sersult)
     return render_template('add.html', form=add_form)
 
 
