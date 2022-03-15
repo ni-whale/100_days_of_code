@@ -8,7 +8,6 @@ import requests
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
 TMDB_API = "https://api.themoviedb.org/3/search/movie"
 TMDB_API_KEY = os.getenv('TMDB_API_KEY')
@@ -52,6 +51,16 @@ class Movie(db.Model):
 
 # db.create_all()
 
+def get_match_list(movie_title):
+    TMDB_query = {
+        'api_key': TMDB_API_KEY,
+        'query': movie_title
+    }
+    response = requests.get(TMDB_API, params=TMDB_query)
+    response.raise_for_status()
+    movie_list = response.json()
+    return movie_list
+
 
 @app.route("/")
 def home():
@@ -80,27 +89,18 @@ def delete(movie_id):
     return redirect(url_for('home'))
 
 
-
-@app.route("/add", methods=['GET', 'POST'])
-def add():
-    search_sersult = []
+@app.route("/add", defaults={'movie_id': None}, methods=['GET', 'POST'])
+@app.route('/add/<movie_id>', methods=['GET', 'POST'])
+def add(movie_id):
     add_form = AddForm()
     if request.method == "POST":
+        if movie_id is not None:
+            print(movie_id)
+            return redirect(url_for('home'))
+        else:
+            search_result = get_match_list(add_form.title.data)['results']
+            return render_template('select.html', movies=search_result)
 
-        TMDB_query = {
-            'api_key': TMDB_API_KEY,
-            'query': add_form.title.data
-        }
-        response = requests.get(TMDB_API, params=TMDB_query)
-        response.raise_for_status()
-        movie_list = response.json()
-
-        print(movie_list)
-        unfiltered_search_result = movie_list['results']
-        print(unfiltered_search_result)
-        for movie in unfiltered_search_result:
-            search_sersult.append(f"{movie['original_title']} - {movie['release_date']}")
-        return render_template('select.html', movies=search_sersult)
     return render_template('add.html', form=add_form)
 
 
