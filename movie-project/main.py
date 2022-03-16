@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
 TMDB_API = "https://api.themoviedb.org/3/search/movie"
+TMDB_DETAILS_API = "https://api.themoviedb.org/3/movie/"
+TMDB_GET_IMAGE = "https://image.tmdb.org/t/p/w500"
 TMDB_API_KEY = os.getenv('TMDB_API_KEY')
 TMDB_BEARER_TOKEN = os.getenv('TMDB_BEARER_TOKEN')
 
@@ -89,19 +91,28 @@ def delete(movie_id):
     return redirect(url_for('home'))
 
 
-@app.route("/add", defaults={'movie_id': None}, methods=['GET', 'POST'])
-@app.route('/add/<movie_id>', methods=['GET', 'POST'])
-def add(movie_id):
+@app.route("/add", methods=['GET', 'POST'])
+def add():
     add_form = AddForm()
     if request.method == "POST":
-        if movie_id is not None:
-            print(movie_id)
-            return redirect(url_for('home'))
-        else:
-            search_result = get_match_list(add_form.title.data)['results']
-            return render_template('select.html', movies=search_result)
-
+        search_result = get_match_list(add_form.title.data)['results']
+        return render_template('select.html', movies=search_result)
     return render_template('add.html', form=add_form)
+
+
+@app.route("/find")
+def find_movie():
+    movie_api_id = request.args.get("id")
+    print(movie_api_id)
+    TMDB_query = {
+        'api_key': TMDB_API_KEY,
+        'language': 'en-US'
+    }
+    response = requests.get(TMDB_DETAILS_API + movie_api_id, params=TMDB_query)
+    response.raise_for_status()
+    movie_details = response.json()
+    print(movie_details)
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
