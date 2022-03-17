@@ -111,7 +111,17 @@ def find_movie():
     response = requests.get(TMDB_DETAILS_API + movie_api_id, params=TMDB_query)
     response.raise_for_status()
     movie_details = response.json()
-    print(movie_details)
+
+    new_movie = Movie(
+        title=movie_details['original_title'],
+        year=movie_details['release_date'],
+        description=movie_details['overview'],
+        img_url=f"{TMDB_GET_IMAGE}{movie_details['poster_path']}",
+    )
+    db.session.add(new_movie)
+    db.session.commit()
+    movie = Movie.query.filter_by(title=movie_details['original_title']).first()
+    print(movie)
     return redirect(url_for('home'))
 
 
