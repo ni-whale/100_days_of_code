@@ -1,12 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
 import os
 from dotenv import load_dotenv
+
 
 load_dotenv('/home/ni_whale/Documents/Working_space/projects/Python/storage.env')
 TMDB_API = "https://api.themoviedb.org/3/search/movie"
@@ -48,7 +50,7 @@ class Movie(db.Model):
 
     # Optional: this will allow each book object to be identified by its title when printed.
     def __repr__(self):
-        return f'<Book {self.title}>'
+        return f'{self.title}'
 
 
 # db.create_all()
@@ -66,9 +68,15 @@ def get_match_list(movie_title):
 
 @app.route("/")
 def home():
-    all_movies = db.session.query(Movie).all()
-    return render_template("index.html", movies=all_movies)
+    # This line creates a list of all the movies sorted by rating
+    all_movies = Movie.query.order_by(Movie.rating).all()
 
+    # This line loops through all the movies
+    for i in range(len(all_movies)):
+        # This line gives each movie a new ranking reversed from their order in all_movies
+        all_movies[i].ranking = len(all_movies) - i
+    db.session.commit()
+    return render_template("index.html", movies=all_movies)
 
 @app.route("/edit/<movie_id>", methods=['GET', 'POST'])
 def edit(movie_id):
@@ -120,9 +128,9 @@ def find_movie():
     )
     db.session.add(new_movie)
     db.session.commit()
+
     movie = Movie.query.filter_by(title=movie_details['original_title']).first()
-    print(movie)
-    return redirect(url_for('home'))
+    return redirect(url_for('edit', movie_id=movie.id))
 
 
 if __name__ == '__main__':
