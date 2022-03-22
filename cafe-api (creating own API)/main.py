@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
@@ -23,6 +25,20 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
+    def to_dict(self):
+        # Method 1.
+        # dictionary = {}
+        # # Loop through each column in the data record
+        # for column in self.__table__.columns:
+        #     # Create a new dictionary entry;
+        #     # where the key is the name of the column
+        #     # and the value is the value of the column
+        #     dictionary[column.name] = getattr(self, column.name)
+        # return dictionary
+
+        # Method 2. Altenatively use Dictionary Comprehension to do the same thing.
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 
 @app.route("/")
 def home():
@@ -30,7 +46,24 @@ def home():
 
 @app.route("/random")
 def get_random_cafe():
-    ...
+    cafes = db.session.query(Cafe).all()
+    random_cafe = random.choice(cafes)
+    return jsonify(cafe=random_cafe.to_dict())
+
+@app.route("/all")
+def get_all_cafes():
+    cafes = db.session.query(Cafe).all()
+    return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
+
+@app.route("/search")
+def get_cafe_at_location():
+    query_location = request.args.get("loc")
+    cafe = Cafe.query.filter_by(location=query_location).first()
+    if cafe:
+        return jsonify(cafe=cafe.to_dict())
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
+
     
 
 ## HTTP GET - Read Record
