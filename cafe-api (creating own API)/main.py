@@ -2,6 +2,7 @@ import random
 
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm.exc import UnmappedClassError, UnmappedInstanceError
 
 app = Flask(__name__)
 
@@ -82,6 +83,31 @@ def add():
     db.session.add(new_cafe)
     db.session.commit()
     return jsonify(response={"Success": "Successfully added a new cafe."})
+
+@app.route("/update-price/<int:cafe_id>", methods=["PATCH"])
+def patch_new_price(cafe_id):
+    new_price = request.args.get("new_price")
+    cafe = db.session.query(Cafe).get(cafe_id)
+    if cafe:
+        cafe.coffee_price = new_price
+        db.session.commit()
+        return jsonify(response={"success": "Successfully updated the price."})
+    else:
+        return jsonify(error={"Not Found": "Sorry a cafe with that id was not found in the database."})
+
+@app.route("/report-closed/<int:cafe_id>", methods=['DELETE'])
+def delete_cafe(cafe_id):
+    cafe_by_id = Cafe.query.get(cafe_id)
+    api_key = request.args.get("api-key")
+    if api_key == "TopSecretAPIKey":
+        try:
+            db.session.delete(cafe_by_id)
+            db.session.commit()
+            return jsonify(response={f"Success": f"Successfully deleted cafe with ID {cafe_id}"}), 200
+        except UnmappedInstanceError:
+            return jsonify(response={f"Not Found": "Sorry, a cafe with that ID was not found in the database."}), 404
+    else:
+        return jsonify(response={f"Error": "Sorry, that's not allowed. Make sure that you have the correct API key."}), 403
 
     
 
