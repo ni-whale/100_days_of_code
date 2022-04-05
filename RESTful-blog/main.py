@@ -1,10 +1,12 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
+import datetime
+
 
 ## Delete this code:
 # import requests
@@ -42,24 +44,19 @@ class CreatePostForm(FlaskForm):
     subtitle = StringField("Subtitle", validators=[DataRequired()])
     author = StringField("Your Name", validators=[DataRequired()])
     img_url = StringField("Blog Image URL", validators=[DataRequired(), URL()])
-    body = StringField("Blog Content", validators=[DataRequired()])
+    body = CKEditorField("Blog Content", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
 
 
 @app.route('/')
 def get_all_posts():
-    posts = db.session.query(BlogPost).all()
+    posts = BlogPost.query.all()
     return render_template("index.html", all_posts=posts)
 
 
 @app.route("/post/<int:index>")
 def show_post(index):
-    requested_post = None
-    posts = db.session.query(BlogPost).all()
-    for blog_post in posts:
-        print(blog_post["id"])
-        if blog_post["id"] == index:
-            requested_post = blog_post
+    requested_post = BlogPost.query.get(index)
     return render_template("post.html", post=requested_post)
 
 
@@ -71,6 +68,27 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
+@app.route("/edit/int:post_id")
+def edit_post(post_id):
+    ...
+
+@app.route("/new-post", methods=['GET', 'POST'])
+def create_new_post():
+    new_post_form = CreatePostForm()
+    if request.method == "POST":
+        new_post = BlogPost(
+            title=request.form.title,
+            subtitle=request.form.subtitle,
+            date=datetime.date.today().strftime('%B %-d, %Y'),
+            body=request.form.body,
+            author=request.form.author,
+            img_url=request.form.img_url
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('get_all_posts'))
+    return render_template("make-post.html", form=new_post_form)
 
 
 if __name__ == "__main__":
