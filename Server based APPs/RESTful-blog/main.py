@@ -78,12 +78,12 @@ def create_new_post():
     new_post_form = CreatePostForm()
     if request.method == "POST":
         new_post = BlogPost(
-            title=request.form.title,
-            subtitle=request.form.subtitle,
+            title=request.form['title'],
+            subtitle=request.form["subtitle"],
             date=datetime.date.today().strftime('%B %-d, %Y'),
-            body=request.form.body,
-            author=request.form.author,
-            img_url=request.form.img_url
+            body=request.form["body"],
+            author=request.form["author"],
+            img_url=request.form["img_url"]
         )
         db.session.add(new_post)
         db.session.commit()
