@@ -30,7 +30,7 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", logged_in=current_user.is_authenticated)
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -50,7 +50,8 @@ def register():
         # Log in and authenticate user after adding details to database.
         login_user(new_user)
 
-        return render_template('secrets.html', user=new_user)
+        # return render_template('secrets.html', user=new_user)
+        return redirect(url_for('secrets'))
     return render_template("register.html")
 
 
@@ -62,16 +63,26 @@ def login():
 
         #Find the uer by email entered
         user = User.query.filter_by(email=email).first()
-
-        if check_password_hash(user.password, password):
+        # Email doesn't exist
+        if not user:
+            flash("That email does not exist, please try again.")
+            return redirect(url_for('login'))
+        # Password incorrect
+        elif not check_password_hash(user.password, password):
+            flash('Password incorrect, please try again.')
+            return redirect(url_for('login'))
+        # Email exists and password correct
+        else:
             login_user(user)
             return redirect(url_for('secrets'))
     return render_template("login.html")
 
 
 @app.route('/secrets')
+@login_required
 def secrets():
-    return render_template("secrets.html")
+    print(current_user.name)
+    return render_template("secrets.html", name=current_user.name)
 
 
 @app.route('/logout')
@@ -81,6 +92,7 @@ def logout():
 
 
 @app.route('/download')
+@login_required
 def download():
    return send_from_directory("static/files", 'cheat_sheet.pdf')
 
