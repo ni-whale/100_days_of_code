@@ -50,15 +50,20 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     posts = relationship("BlogPost", back_populates="author")
+    comments = relationship("Comment", back_populates="comment_author")
 
 
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+    # "users.id" The users refers to the tablename of the Users class.
+    # "comments" refers to the comments property in the User class.
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    comment_author = relationship("User", back_populates="comments")
 
 
-db.create_all()
+# db.create_all()
 
 
 @login_manager.user_loader
@@ -135,10 +140,16 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
 def show_post(post_id):
-    requested_post = BlogPost.query.get(post_id)
     comment_form = CommentForm()
+    requested_post = BlogPost.query.get(post_id)
+    new_comment = Comment(
+        text=comment_form.comment.data
+    )
+    db.session.add(new_comment)
+    db.session.commit()
+
     return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, admin=current_user.get_id() == "1", form=comment_form)
 
 
