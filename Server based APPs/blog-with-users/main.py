@@ -13,7 +13,6 @@ from sqlalchemy import Table, Column, Integer, ForeignKey
 from flask_gravatar import Gravatar
 from functools import wraps
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
@@ -42,6 +41,9 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+    # ***************Parent Relationship*************#
+    comments = relationship("Comment", back_populates="parent_post")
+
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
@@ -56,11 +58,14 @@ class User(UserMixin, db.Model):
 class Comment(db.Model):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.Text, nullable=False)
     # "users.id" The users refers to the tablename of the Users class.
     # "comments" refers to the comments property in the User class.
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     comment_author = relationship("User", back_populates="comments")
+    # ***************Child Relationship*************#
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
+    text = db.Column(db.Text, nullable=False)
 
 
 # db.create_all()
@@ -74,18 +79,20 @@ def load_user(user_id):
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        #If id is not 1 then return abort with 403 error
+        # If id is not 1 then return abort with 403 error
         if not current_user.is_authenticated or current_user.id != 1:
             return abort(403)
-        #Otherwise continue with the route function
+        # Otherwise continue with the route function
         return f(*args, **kwargs)
+
     return decorated_function
 
 
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated, admin=current_user.get_id() == "1")
+    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated,
+                           admin=current_user.get_id() == "1")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -140,17 +147,25 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route("/post/<int:post_id>", methods=['GET', 'POST'])
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
-    comment_form = CommentForm()
+    form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
-    new_comment = Comment(
-        text=comment_form.comment.data
-    )
-    db.session.add(new_comment)
-    db.session.commit()
 
-    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, admin=current_user.get_id() == "1", form=comment_form)
+    if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("You need to login or register to comment.")
+            return redirect(url_for("login"))
+
+        new_comment = Comment(
+            text=form.comment_text.data,
+            comment_author=current_user,
+            parent_post=requested_post
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+
+    return render_template("post.html", post=requested_post, form=form, current_user=current_user)
 
 
 @app.route("/about")
