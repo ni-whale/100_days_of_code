@@ -1,9 +1,6 @@
 def logging_decorator(function):
     def wrapper(*args):
-        args_collection = []
-        for arg in args:
-            args_collection.append(arg)
-        print(f"{function.__name__} function was called with arguments: {args_collection}, with output: {function()}")
+        print(f"{function.__name__} function was called with arguments: {args}, with output: {function(*args)}")
     return wrapper
 
 @logging_decorator
