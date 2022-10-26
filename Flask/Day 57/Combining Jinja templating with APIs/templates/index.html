@@ -5,11 +5,15 @@
     <title>Hello World!</title>
 </head>
 <body>
-    <h1>Hey {{ name }},</h1>
-    <h2>I thing you are {{ gender }},</h2>
-    <h3>And maybe {{ age }} years old.</h3>
+    {% if name != '': %}
+        <h1>Hey {{ name }},</h1>
+        <h2>I thing you are {{ gender }},</h2>
+        <h3>And maybe {{ age }} years old.</h3>
+    {% else %}
+        <h1>There is no name I can check yet.</h1>
+    {% endif %}
 </body>
 <footer>
-    <p>Copyright {{year}}. Built by Nikita B.</p>
+<!--    <p>Copyright {{year}}. Built by Nikita B.</p>-->
 </footer>
 </html>
