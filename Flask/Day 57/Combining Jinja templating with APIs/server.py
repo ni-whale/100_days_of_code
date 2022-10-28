@@ -24,5 +24,14 @@ def name_info(username):
 
     return render_template('index.html', name=name, gender=gender, age=age)
 
+
+@app.route('/blog/<num>')
+def get_blog(num):
+    print(num)
+    blog_url = "https://api.npoint.io/b077e3e0258a556214d2"
+    responce = requests.get(blog_url)
+    all_posts = responce.json()
+    return render_template("blog.html", posts=all_posts)
+
 if __name__ == "__main__":
     app.run(debug=True)
