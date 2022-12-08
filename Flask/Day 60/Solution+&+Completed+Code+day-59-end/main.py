@@ -32,21 +32,9 @@ def contact():
         email = request.form['email']
         phone_number = request.form['phone_number']
         message = request.form['message']
-        print(f"{name} \ {email} \ {phone_number} \ {message}")
-        return "<h1>Successfully sent your message.</h1>"
-    return render_template("contact.html", message="Contact Me")
-
-@app.route("/form-entry", methods=['GET', 'POST'])
-def receive_data():
-    if request.method == 'POST':
-        name = request.form["name"]
-        email = request.form['email']
-        phone_number = request.form['phone_number']
-        message = request.form['message']
-        print(f"{name} \ {email} \ {phone_number} \ {message}")
-        return "<h1>Successfully sent your message.</h1>"
-    else:
-        return redirect(url_for('contact'))
+        print(f"{name} | {email} | {phone_number} | {message}")
+        return render_template("contact.html")
+    return render_template("contact.html", message="False")
 
 
 if __name__ == "__main__":
