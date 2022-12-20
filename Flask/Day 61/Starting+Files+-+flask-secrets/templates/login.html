@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-
 <html>
 <head>
 	<title>Login</title>
@@ -10,9 +9,18 @@
 	<!-- This is where our form will go. -->
 	<form method="POST" action="{{ url_for('login') }}">
 		{{ form.csrf_token }}
-		{{ form.email.label }} {{ form.email(size=30) }}
-		{{ form.password.label }} {{ form.password(size=30) }}
-		<input type="submit" value="Log In">
+		<p>
+			{{ form.email.label }} <br> {{ form.email(size=30) }}
+			{% for err in from.email.errors %}
+			{% endfor %}
+			<span style="color:red" >{{ err }}</span>
+		</p>
+		<p>
+			{{ form.password.label }} <br> {{ form.password(size=30) }}
+			{% for err in from.email.errors %}
+			{% endfor %}
+		</p>
+		{{ form.submit }}
 	</form>
 </div>
 </body>

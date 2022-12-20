@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators
+from wtforms import StringField, PasswordField, SubmitField, EmailField
+from wtforms.validators import DataRequired, Length, Email
+
 
 
 app = Flask(__name__)
@@ -8,8 +10,9 @@ app.secret_key = "any-string-you-want-just-keep-it-secret"
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email Address', [validators.Length(max=30)])
-    password = StringField('Password', [validators.Length(max=30)])
+    email = EmailField(label='Email', validators=[DataRequired(), Email()])
+    password = PasswordField(label='Password', validators=[DataRequired(), Length(min=8)])
+    submit = SubmitField(label='Log In')
 
 
 @app.route("/")
